@@ -19,3 +19,22 @@ Bonus:
 
 Arrivé à un certain niveau:
 -remettre la lance du debut (plus facile) pendant un temps limité.
+
+
+Avatar collision avec:  
+- une smoke -> perte de vie.
+- un bonus -> faire l'effet du bonus.
+
+Smoke collision avec:
+- les murs et sol -> rebond.
+- l'avatar -> perte de vie avatar.
+- water -> smoke se divise en 2.
+
+Bonus collision avec:
+- le sol genre on fait pop en l'air et ça va se mettre sur le sol.
+- l'avatar -> faire l'effet du bonus.
+
+Water collision avec:
+- une smoke -> smoke se divise en 2.
+
+Bonus draw différentes couleur.
