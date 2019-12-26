@@ -2,12 +2,12 @@
 #define GAME_HPP_
 
 #include <iostream>
-#include <string>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 using namespace std;
 #include "object.hh"
+//#include "avatar.hh"
 
 class Game {
 public:
@@ -28,6 +28,7 @@ private:
   int frameCount, timerFPS, lastFrame;
   Object* wallpaper;
   int mousex, mousey;
+  //Avatar* avatar;
 };
 
 #endif //GAME_H

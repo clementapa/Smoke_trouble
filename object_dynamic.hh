@@ -16,6 +16,9 @@ class Object_Dynamic: public Object{
 
     virtual void collision(const Game& s) = 0;
     virtual void update(const Game& s) = 0;
+
+    float getvx() const {return vx;}
+    float getvy() const {return vy;}
 };
 
 #endif

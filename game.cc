@@ -8,8 +8,9 @@ Game::Game() {
   TTF_Init();
   running=true;
   count=0;
-  wallpaper= new Object(0.0,0.0,720,480,"image.png",ren);
-  //wallpaper.setObject(0,0,720,480);
+  wallpaper = new Object(0.0,0.0,480,720,"image.png",ren);
+  //avatar = new Avatar(50,50,100,100,"pompier.png",ren,0,0,5);
+  //wallpaper.setObject(0,0,480,720);
   //wallpaper.setImage("image.png",ren);
   font = TTF_OpenFont("Sans.ttf", 24);
   loop();
@@ -48,8 +49,9 @@ void Game::render() {
 //  SDL_RenderFillRect(ren, &rect);
 
   draw(wallpaper);
-  //draw("Score: 0", 20, 30, 0, 255, 0);
-  
+  //draw(avatar);
+  draw("Score: 0", 20, 30, 0, 255, 0);
+
   frameCount++;
   int timerFPS = SDL_GetTicks()-lastFrame;
   if(timerFPS<(1000/60)) {
