@@ -1,8 +1,7 @@
 #ifndef OBJECT_HPP_
 #define OBJECT_HPP_
 
-#include <iostream>
-#include "simu.hh"
+#include "game.hh"
 //#define DT 0.01
 //#define G 9.81
 
@@ -10,16 +9,25 @@ class Object{
   protected:
     float x;
     float y;
-    float vx;
-    float vy;
+    int h;
+    int w;
+    SDL_Texture* texture;
 
   public:
-    Object(float x, float y, float vx, float vy):x(x),y(y),vx(vx),vy(vy){}
-    virtual ~Object(){}
+    Object(float x, float y, int h, int w, string filename, SDL_Renderer* ren);
+    //Object(const Object& o);
 
-    virtual void draw(Simu s) const = 0;
-    virtual void collision(const Simu& s) = 0;
-    virtual void update(const Simu& s) = 0;
+    ~Object(){}
+
+    void setObject(float x, float y, int w, int h);
+    void setImage(string filename, SDL_Renderer* ren);
+
+    float getx() const {return x;}
+    float gety() const {return y;}
+    int getw() const {return w;}
+    int geth() const {return h;}
+    SDL_Texture* getText() const {return texture;}
+
 };
 
 #endif

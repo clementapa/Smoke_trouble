@@ -1,4 +1,4 @@
-#include "simu.hh"
+//#include "simu.hh"
 
 /*Simu& Simu::operator+=(Object* rhs){
   vect_objet.push_back(rhs);

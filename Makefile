@@ -4,7 +4,7 @@ OBJECTS=$(SOURCES:.cc=.o)
 CCFLAGS=-Wall -Werror `sdl-config --cflags`
 CC=g++
 $(EXEC): $(OBJECTS)
-	$(CC) $(OBJECTS) `sdl-config --libs` -o $(EXEC)
+	$(CC) $(OBJECTS) -lSDL2 -lSDL2_ttf -lSDL2_image `sdl-config --libs` -o $(EXEC)
 %.o: %.cc
 	$(CC) $(CCFLAGS) -c $< -o $@
 clean:
