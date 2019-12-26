@@ -8,10 +8,10 @@ Game::Game() {
   TTF_Init();
   running=true;
   count=0;
-  wallpaper = new Object(0.0,0.0,480,720,"image.png",ren);
-  avatar = new Avatar(300,405,80,80,"pompier.png",ren,10,10,5);
-  vect_smoke.push_back(new Smoke(350,400,50,50,"pompier.png",ren,10,20,5));
-  vect_smoke.push_back(new Smoke(10,50,50,50,"pompier.png",ren,10,20,5));
+  wallpaper = new Object(0.0,0.0,480,720,"Img/image.png",ren);
+  avatar = new Avatar(300,405,80,80,"Img/pompier.png",ren,10,10,5);
+  vect_smoke.push_back(new Smoke(350,400,50,50,"Img/fire.png",ren,10,20,5));
+  vect_smoke.push_back(new Smoke(10,50,50,50,"Img/fire.png",ren,10,20,5));
   font = TTF_OpenFont("Sans.ttf", 24);
   loop();
 }
