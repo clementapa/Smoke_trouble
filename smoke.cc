@@ -7,21 +7,21 @@ void Smoke::collision(const Object& o){
 }
 
 void Smoke::update(int s_w, int s_h){
-  if(y-h/2<=0.0 || y+h/2>=s_w){//sol et haut
+  if(y<=0.0 || y+h>=s_w){//sol et haut
     vx*=0.95;
     vy*=-0.85;
-    if(y-h/2<=0.0)
-      y=h/2;
+    if(y<=0.0)
+      y=0;
     else
-      y=s_w-h/2;
+      y=s_w-h;
   }
-  else if(x-w/2<=0.0|| x+w/2>=s_h){
+  else if(x<=0.0|| x+w>=s_h){
     vx*=-0.85;
     vy*=0.95;
-    if(x-w/2<=0.0)
-      x=w/2;
+    if(x<=0.0)
+      x=0;
     else
-      x=s_h-w/2;
+      x=s_h-w;
   }
   x+=vx*DT;
   y+=vy*DT;
