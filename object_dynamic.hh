@@ -1,9 +1,9 @@
 #ifndef OBJECT_DYNAMIC_HPP_
 #define OBJECT_DYNAMIC_HPP_
 
-#include <iostream>
 #include "object.hh"
 #include "game.hh"
+using namespace std;
 
 class Object_Dynamic: public Object{
   protected:

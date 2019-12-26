@@ -1,4 +1,5 @@
 #include "game.hh"
+using namespace std;
 
 Game::Game() {
   SDL_Init(0);
@@ -7,7 +8,7 @@ Game::Game() {
   TTF_Init();
   running=true;
   count=0;
-  wallpaper=new Object(0,0,720,480,"image.png",ren);
+  wallpaper= new Object(0.0,0.0,720,480,"image.png",ren);
   //wallpaper.setObject(0,0,720,480);
   //wallpaper.setImage("image.png",ren);
   font = TTF_OpenFont("Sans.ttf", 24);

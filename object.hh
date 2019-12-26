@@ -1,7 +1,11 @@
 #ifndef OBJECT_HPP_
 #define OBJECT_HPP_
 
-#include "game.hh"
+#include <string>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+using namespace std;
 //#define DT 0.01
 //#define G 9.81
 
