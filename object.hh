@@ -1,6 +1,7 @@
 #ifndef OBJECT_HPP_
 #define OBJECT_HPP_
 
+#include <iostream>
 #include <string>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -30,6 +31,8 @@ class Object{
     float gety() const {return y;}
     int getw() const {return w;}
     int geth() const {return h;}
+    void setx(float new_x){x=new_x;}
+    void sety(float new_y){y=new_y;}    
     SDL_Texture* getText() const {return texture;}
 
 };

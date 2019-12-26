@@ -9,9 +9,9 @@ Game::Game() {
   running=true;
   count=0;
   wallpaper = new Object(0.0,0.0,480,720,"image.png",ren);
-  //avatar = new Avatar(50,50,100,100,"pompier.png",ren,0,0,5);
-  //wallpaper.setObject(0,0,480,720);
-  //wallpaper.setImage("image.png",ren);
+  avatar = new Avatar(300,405,80,80,"pompier.png",ren,10,10,5);
+  for(int i=0;i<5;i++)
+    vect_smoke.push_back(new Smoke(rand()*50,rand()*50,80,80,"water.png",ren,10,10,5));
   font = TTF_OpenFont("Sans.ttf", 24);
   loop();
 }
@@ -40,17 +40,38 @@ void Game::loop() {
   }
 }
 
+void Game::update(){
+    //for(int i=0;i<5;i++)
+      //vect_smoke[i]->update();
+}
+
+void Game::input() {
+  SDL_Event e;
+  while(SDL_PollEvent(&e)) {
+    if(e.type == SDL_QUIT) {running=false; cout << "Quitting" << endl;}
+    if(e.type == SDL_KEYDOWN) {
+      //if(e.key.keysym.sym == SDLK_ESCAPE) running=false;
+      if(e.key.keysym.sym == SDLK_q) {
+        avatar->setx(avatar->getx()-avatar->getvx());
+      }
+      else if(e.key.keysym.sym == SDLK_d) {
+        avatar->setx(avatar->getx()+avatar->getvy());
+      }
+    }
+    if(e.type == SDL_KEYUP) {
+      if(e.key.keysym.sym == SDLK_q) {}
+    }
+     SDL_GetMouseState(&mousex, &mousey);
+  }
+}
+
 void Game::render() {
-//  SDL_SetRenderDrawColor(ren, 255, 0, 0, 255);
-//  SDL_Rect rect;
-//  rect.x=rect.y=0;
-//  rect.w=720;
-//  rect.h=480;
-//  SDL_RenderFillRect(ren, &rect);
 
   draw(wallpaper);
-  //draw(avatar);
+  draw(avatar);
   draw("Score: 0", 20, 30, 0, 255, 0);
+  for(int i=0;i<5;i++)
+    draw(vect_smoke[i]);
 
   frameCount++;
   int timerFPS = SDL_GetTicks()-lastFrame;
@@ -84,19 +105,4 @@ void Game::draw(const char* msg, int x, int y, int r, int g, int b) {
  SDL_FreeSurface(surf);
  SDL_RenderCopy(ren, tex, NULL, &rect);
  SDL_DestroyTexture(tex);
-}
-
-void Game::input() {
-  SDL_Event e;
-  while(SDL_PollEvent(&e)) {
-    if(e.type == SDL_QUIT) {running=false; cout << "Quitting" << endl;}
-    if(e.type == SDL_KEYDOWN) {
-      if(e.key.keysym.sym == SDLK_ESCAPE) running=false;
-      if(e.key.keysym.sym == SDLK_w) {cout << "w down" << endl;}
-    }
-    if(e.type == SDL_KEYUP) {
-      if(e.key.keysym.sym == SDLK_w) {cout << "w up" << endl;}
-    }
-     SDL_GetMouseState(&mousex, &mousey);
-  }
 }

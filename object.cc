@@ -1,5 +1,4 @@
 #include "object.hh"
-using namespace std;
 
 Object::Object(float x, float y, int h, int w, string filename, SDL_Renderer* ren):x(x),y(y),h(h),w(w){
   SDL_Surface* surf = IMG_Load(filename.c_str());

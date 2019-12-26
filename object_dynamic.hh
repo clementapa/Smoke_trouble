@@ -2,7 +2,6 @@
 #define OBJECT_DYNAMIC_HPP_
 
 #include "object.hh"
-#include "game.hh"
 using namespace std;
 
 class Object_Dynamic: public Object{
@@ -14,11 +13,13 @@ class Object_Dynamic: public Object{
     Object_Dynamic(float x, float y, int h, int w, string filename, SDL_Renderer* ren, float vx, float vy):Object(x,y,h,w,filename,ren),vx(vx),vy(vy){}
     virtual ~Object_Dynamic(){}
 
-    virtual void collision(const Game& s) = 0;
-    virtual void update(const Game& s) = 0;
-
     float getvx() const {return vx;}
     float getvy() const {return vy;}
+    void setvx(float new_vx){vx=new_vx;}
+    void setvy(float new_vy){vy=new_vy;}
+
+    virtual void collision(const Object& o) = 0;
+    virtual void update() = 0;
 };
 
 #endif
