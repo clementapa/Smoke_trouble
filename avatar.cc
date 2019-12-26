@@ -4,6 +4,10 @@ Avatar::Avatar(float x, float y, int h, int w, string filename, SDL_Renderer* re
 
 void Avatar::collision(Object* o){
 
+  if( !( (o->getx() >= x + w) || (o->getx() + o->getw() <= x)  || (o->gety() >= y + h)  || (o->gety() + o->geth() <= y)) )
+    std::cout << "collision" << '\n';
+
+
 }
 
 void Avatar::update(int s_w,int s_h){

@@ -13,6 +13,7 @@ Game::Game() {
   vect_smoke.push_back(new Smoke(S_W-100,130,100,100,"Img/fire.png",ren,-20,-20,5));
   vect_smoke.push_back(new Smoke(0,130,100,100,"Img/fire.png",ren,20,-20,5));
   font = TTF_OpenFont("font/Sans.ttf", 24);
+
   loop();
 }
 
@@ -41,9 +42,11 @@ void Game::loop() {
 }
 
 void Game::update(){
-    for(int i=0;i<2;i++)
-      vect_smoke[i]->update(480,720);
-    avatar->update(480,720);
+  for(int i=0;i<2;i++){
+    vect_smoke[i]->update(480,720);
+    avatar->collision(vect_smoke[i]);
+  }
+  avatar->update(480,720);
 
 }
 
