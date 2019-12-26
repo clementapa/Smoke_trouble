@@ -19,7 +19,7 @@ class Object_Dynamic: public Object{
     void setvy(float new_vy){vy=new_vy;}
 
     virtual void collision(const Object& o) = 0;
-    virtual void update() = 0;
+    virtual void update(int w,int h) = 0;
 };
 
 #endif

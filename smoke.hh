@@ -1,7 +1,7 @@
 #ifndef SMOKE_HPP_
 #define SMOKE_HPP_
 
-#define DT 0.01
+#define DT 0.1
 #define G 9.81
 
 #include "object_dynamic.hh"
@@ -16,7 +16,7 @@ class Smoke: public Object_Dynamic{
     ~Smoke(){}
 
     void collision(const Object& o);
-    void update();
+    void update(int w,int h);
 };
 
 #endif

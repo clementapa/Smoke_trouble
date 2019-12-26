@@ -6,6 +6,6 @@ void Avatar::collision(const Object& o){
 
 }
 
-void Avatar::update(){
+void Avatar::update(int w,int h){
 
 }

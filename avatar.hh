@@ -13,7 +13,7 @@ class Avatar: public Object_Dynamic{
     ~Avatar(){}
 
     void collision(const Object& o);
-    void update();
+    void update(int w,int h);
 };
 
 #endif
