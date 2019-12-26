@@ -9,6 +9,7 @@
 using namespace std;
 #include "avatar.hh"
 #include "smoke.hh"
+#include "water.hh"
 
 class Game {
 public:
