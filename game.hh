@@ -17,7 +17,7 @@ public:
   void update(){}
   void input();
   void render();
-  void draw(Object o);
+  void draw(Object* o);
   void draw(const char* msg, int x, int y, int r, int g, int b);
 private:
   SDL_Renderer* ren;

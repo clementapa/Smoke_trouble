@@ -33,7 +33,6 @@ void Game::loop() {
     }
 
   //  cout << mousex << ", " << mousey << endl;
-
     render();
     input();
     update();
@@ -41,29 +40,28 @@ void Game::loop() {
 }
 
 void Game::render() {
-  SDL_SetRenderDrawColor(ren, 255, 0, 0, 255);
-  SDL_Rect rect;
-  rect.x=rect.y=0;
-  rect.w=720;
-  rect.h=480;
-  SDL_RenderFillRect(ren, &rect);
+//  SDL_SetRenderDrawColor(ren, 255, 0, 0, 255);
+//  SDL_Rect rect;
+//  rect.x=rect.y=0;
+//  rect.w=720;
+//  rect.h=480;
+//  SDL_RenderFillRect(ren, &rect);
 
-  draw(*wallpaper);
-  draw("Score: 0", 20, 30, 0, 255, 0);
-
+  draw(wallpaper);
+  //draw("Score: 0", 20, 30, 0, 255, 0);
+  
   frameCount++;
   int timerFPS = SDL_GetTicks()-lastFrame;
   if(timerFPS<(1000/60)) {
     SDL_Delay((1000/60)-timerFPS);
   }
-
   SDL_RenderPresent(ren);
 }
 
 
-void Game::draw(Object o){
-  SDL_Rect dstrect = { static_cast<Sint16>( o.getx()),static_cast<Sint16> (o.gety()),static_cast<Sint16> (o.getw()), static_cast<Sint16>(o.geth()) };
-  SDL_RenderCopy(ren, o.getText(), NULL, &dstrect);
+void Game::draw(Object* o){
+  SDL_Rect dstrect = { static_cast<Sint16>( o->getx()),static_cast<Sint16> (o->gety()),static_cast<Sint16> (o->getw()), static_cast<Sint16>(o->geth()) };
+  SDL_RenderCopy(ren, o->getText(), NULL, &dstrect);
 }
 
 void Game::draw(const char* msg, int x, int y, int r, int g, int b) {
