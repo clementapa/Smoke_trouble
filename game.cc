@@ -8,11 +8,11 @@ Game::Game() {
   TTF_Init();
   running=true;
   count=0;
-  wallpaper = new Object(0.0,0.0,480,720,"Img/image.png",ren);
-  avatar = new Avatar(300,405,80,80,"Img/pompier.png",ren,10,10,5);
-  vect_smoke.push_back(new Smoke(350,400,50,50,"Img/fire.png",ren,10,20,5));
-  vect_smoke.push_back(new Smoke(10,50,50,50,"Img/fire.png",ren,10,20,5));
-  font = TTF_OpenFont("Sans.ttf", 24);
+  wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/image.png",ren);
+  avatar = new Avatar(S_W/2-40,S_H-75,80,80,"Img/pompier.png",ren,10,10,5);
+  vect_smoke.push_back(new Smoke(S_W-100,130,100,100,"Img/fire.png",ren,-20,-20,5));
+  vect_smoke.push_back(new Smoke(0,130,100,100,"Img/fire.png",ren,20,-20,5));
+  font = TTF_OpenFont("font/Sans.ttf", 24);
   loop();
 }
 
@@ -44,6 +44,7 @@ void Game::update(){
     for(int i=0;i<2;i++)
       vect_smoke[i]->update(480,720);
     avatar->update(480,720);
+
 }
 
 void Game::input() {

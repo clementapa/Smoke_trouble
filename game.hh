@@ -11,6 +11,9 @@ using namespace std;
 #include "smoke.hh"
 #include "water.hh"
 
+#define S_W 720
+#define S_H 480
+
 class Game {
 public:
   Game();
