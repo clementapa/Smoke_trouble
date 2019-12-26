@@ -32,6 +32,7 @@ private:
   int mousex, mousey;
   Avatar* avatar;
   vector<Smoke*> vect_smoke;
+  Water* water;
 };
 
 #endif //GAME_H

@@ -15,7 +15,7 @@ class Smoke: public Object_Dynamic{
     Smoke(float x, float y, int h, int w, string filename, SDL_Renderer* ren, float vx, float vy, unsigned int s);
     ~Smoke(){}
 
-    void collision(const Object& o);
+    void collision(Object* o);
     void update(int w,int h);
 };
 

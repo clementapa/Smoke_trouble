@@ -12,7 +12,7 @@ class Avatar: public Object_Dynamic{
     Avatar(float x, float y, int h, int w, string filename, SDL_Renderer* ren, float vx, float vy, unsigned int l);
     ~Avatar(){}
 
-    void collision(const Object& o);
+    void collision(Object* o);
     void update(int w,int h);
 };
 

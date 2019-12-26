@@ -43,6 +43,7 @@ void Game::loop() {
 void Game::update(){
     for(int i=0;i<2;i++)
       vect_smoke[i]->update(480,720);
+    avatar->update(480,720);
 }
 
 void Game::input() {
@@ -50,7 +51,10 @@ void Game::input() {
   while(SDL_PollEvent(&e)) {
     if(e.type == SDL_QUIT) {running=false; cout << "Quitting" << endl;}
     if(e.type == SDL_KEYDOWN) {
-      //if(e.key.keysym.sym == SDLK_ESCAPE) running=false;
+      if(e.key.keysym.sym == SDLK_ESCAPE) running=false;
+      if(e.key.keysym.sym == SDLK_SPACE){
+        water = new Water(avatar->getx(),avatar->gety(),80,80,"Img/water.png",ren,0,10);
+      }
       if(e.key.keysym.sym == SDLK_q) {
         avatar->setx(avatar->getx()-avatar->getvx());
       }
@@ -72,6 +76,7 @@ void Game::render() {
   draw("Score: 0", 20, 30, 0, 255, 0);
   draw(vect_smoke[0]);
   draw(vect_smoke[1]);
+  //draw(water);
 
   frameCount++;
   int timerFPS = SDL_GetTicks()-lastFrame;
