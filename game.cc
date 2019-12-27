@@ -9,6 +9,7 @@ Game::Game() {
   SDL_SetWindowTitle(win, "Fire trouble!!!");
   TTF_Init();
   running=true;
+  round=1;
 
   wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/wallpaper4.jpg",ren);
   Ground=new Object(0,S_H-67,67,S_W,"Img/sol.jpg",ren);
@@ -49,7 +50,7 @@ void Game::init(){
   reserve_smoke.front()->sety(100);
   reserve_smoke.front()->seth(100);
   reserve_smoke.front()->setw(100);
-  reserve_smoke.front()->setvx(-20);
+  reserve_smoke.front()->setvx(-20 -round*14);
   reserve_smoke.front()->setvy(-20);
   reserve_smoke.front()->setsize(3);
 
@@ -60,7 +61,7 @@ void Game::init(){
   reserve_smoke.front()->sety(100);
   reserve_smoke.front()->seth(100);
   reserve_smoke.front()->setw(100);
-  reserve_smoke.front()->setvx(20);
+  reserve_smoke.front()->setvx(20+round*10);
   reserve_smoke.front()->setvy(-20);
   reserve_smoke.front()->setsize(3);
 
@@ -133,7 +134,7 @@ void Game::update(){
       }
       if (vect_smoke.empty()) {
         init();
-
+        round++;
       }
       score+=500;
       water->setx(S_W*10);

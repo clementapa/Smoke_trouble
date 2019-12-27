@@ -40,6 +40,7 @@ private:
   Water* water;
   bool end_game;
   int score;
+  int round;
   vector<Smoke*> vect_smoke;
   list<Smoke*> reserve_smoke;
 };
