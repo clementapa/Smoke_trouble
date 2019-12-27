@@ -14,12 +14,12 @@ Game::Game() {
   water = new Water(S_W*10,-S_H*10,480,10,"Img/water_line.png",ren,0,0);
 
   count_smoke_3=count_smoke_2=count_smoke_1=0;
-  for(size_t i=0;i<NB_SMOKE;i++)
-    vect_smoke_3.push_back(new Smoke(S_W-100,130,"Img/fire.png",ren,3));
+  vect_smoke_3.push_back(new Smoke(S_W-100,130,100,100,"Img/fire.png",ren,20,20,3));
+  vect_smoke_3.push_back(new Smoke(0,130,100,100,"Img/fire.png",ren,-20,20,3));
   for(size_t i=0;i<NB_SMOKE*2;i++)
-    vect_smoke_2.push_back(new Smoke(S_W*10,S_H*10,"Img/fire.png",ren,2));
+    vect_smoke_2.push_back(new Smoke(S_W*100,S_H*100,"Img/fire.png",ren,2));
   for(size_t i=0;i<NB_SMOKE*4;i++)
-    vect_smoke_3.push_back(new Smoke(S_W*10,S_H*10,"Img/fire.png",ren,1));
+    vect_smoke_3.push_back(new Smoke(S_W*100,S_H*100,"Img/fire.png",ren,1));
 
   font = TTF_OpenFont("font/Sans.ttf", 24);
   end_game=false;
@@ -65,8 +65,9 @@ void Game::update(){
       for(int j=count_smoke_3;j<count_smoke_3+2;j++){
         vect_smoke_2[i]->sety(vect_smoke_3[i]->gety());
         vect_smoke_2[i]->sety(vect_smoke_3[i]->gety());
+        vect_smoke_2[i]->setvy(vect_smoke_2[i]->getvy());
         if(temp==-1)
-          vect_smoke_2[i]->setvx(vect_smoke_2[i]->getvx()*-1);
+          vect_smoke_2[i]->setvx(vect_smoke_3[i]->getvx()*-1);
         count_smoke_3+=2;
         temp*=-1;
       }
