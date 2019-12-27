@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <list>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
@@ -38,6 +39,7 @@ private:
   bool end_game;
   int score;
   vector<Smoke*> vect_smoke;
+  list<Smoke*> reserve_smoke;
 };
 
 #endif //GAME_H
