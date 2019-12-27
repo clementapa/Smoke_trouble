@@ -10,6 +10,7 @@ Game::Game() {
   count=0;
   wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/image.png",ren);
   avatar = new Avatar(S_W/2-40,S_H-80,80,80,"Img/pompier.png",ren,10,10,5);
+  water = new Water(S_W*10,S_H*10,80,80,"Img/water.png",ren,0,0);
   vect_smoke.push_back(new Smoke(S_W-100,130,100,100,"Img/fire.png",ren,-20,-20,5));
   vect_smoke.push_back(new Smoke(0,130,100,100,"Img/fire.png",ren,20,-20,5));
   font = TTF_OpenFont("font/Sans.ttf", 24);
@@ -47,7 +48,7 @@ void Game::update(){
     avatar->collision(vect_smoke[i]);
   }
   avatar->update(S_H,S_W);
-
+  water->update(S_H,S_W);
 }
 
 void Game::input() {
@@ -57,7 +58,10 @@ void Game::input() {
     if(e.type == SDL_KEYDOWN) {
       if(e.key.keysym.sym == SDLK_ESCAPE) running=false;
       if(e.key.keysym.sym == SDLK_SPACE){
-        water = new Water(avatar->getx(),avatar->gety(),80,80,"Img/water.png",ren,0,10);
+        water->setx(avatar->getx());
+        water->sety(avatar->gety());
+        water->setvx(0.0);
+        water->setvy(-10.0);
       }
       if(e.key.keysym.sym == SDLK_q) {
         avatar->setx(avatar->getx()-avatar->getvx());
@@ -80,7 +84,7 @@ void Game::render() {
   draw("Score: 0", 20, 30, 0, 255, 0);
   draw(vect_smoke[0]);
   draw(vect_smoke[1]);
-  //draw(water);
+  draw(water);
 
   frameCount++;
   int timerFPS = SDL_GetTicks()-lastFrame;
