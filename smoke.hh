@@ -13,6 +13,7 @@ class Smoke: public Object_Dynamic{
 
   public:
     Smoke(float x, float y, int h, int w, string filename, SDL_Renderer* ren, float vx, float vy, unsigned int s);
+    Smoke(float x, float y, string filename, SDL_Renderer* ren, unsigned int s);    
     ~Smoke(){}
 
     void setsize(int new_s){size=new_s;}

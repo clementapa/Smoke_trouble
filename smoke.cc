@@ -2,6 +2,17 @@
 
 Smoke::Smoke(float x, float y, int h, int w, string filename, SDL_Renderer* ren, float vx, float vy, unsigned int s):Object_Dynamic(x,y,h,w,filename,ren,vx,vy),size(s){}
 
+Smoke::Smoke(float x, float y, string filename, SDL_Renderer* ren, unsigned int s):Object_Dynamic(x,y,100,100,filename,ren,20,20),size(s){
+  if (s == 2){
+    h=h/2;
+    w=w/2;
+  }
+  else{
+    h=h/4;
+    w=w/2;
+  }
+}
+
 void Smoke::update(int s_w, int s_h){
 
   vy=vy + 100*0.01;
