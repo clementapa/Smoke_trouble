@@ -54,10 +54,11 @@ void Game::update(){
     }
     else if(water->collision(vect_smoke[i])){
       if((vect_smoke[i]->getsize())-1!=0){
-        vect_smoke.push_back(new Smoke(vect_smoke[i]->getx(),vect_smoke[i]->gety()-50,(vect_smoke[i]->geth())/2,(vect_smoke[i]->getw())/2,"Img/fire.png",ren,-vect_smoke[i]->getvx(),vect_smoke[i]->getvy(),vect_smoke[i]->getsize()-1));
+        //vect_smoke.push_back(new Smoke(vect_smoke[i]->getx(),40,(vect_smoke[i]->geth())/2,(vect_smoke[i]->getw())/2,"Img/fire.png",ren,-vect_smoke[i]->getvx(),vect_smoke[i]->getvy(),vect_smoke[i]->getsize()-1));
         vect_smoke[i]->seth((vect_smoke[i]->geth())/2);
         vect_smoke[i]->setw((vect_smoke[i]->getw())/2);
-        vect_smoke[i]->sety(vect_smoke[i]->gety()-50);
+        vect_smoke[i]->sety(40);
+        vect_smoke[i]->setvy(-20);
         vect_smoke[i]->setsize((vect_smoke[i]->getsize())-1);
         score+=500;
       }
@@ -83,7 +84,6 @@ void Game::input() {
           water->sety(avatar->gety());
           water->setvx(0.0);
           water->setvy(-5.0);
-
         }
       }
       if(e.key.keysym.sym == SDLK_q && end_game==false) {
