@@ -1,3 +1,4 @@
+#include <string>
 #include "game.hh"
 using namespace std;
 
@@ -10,11 +11,12 @@ Game::Game() {
   count=0;
   wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/image.png",ren);
   avatar = new Avatar(S_W/2-40,S_H-80,80,80,"Img/pompier.png",ren,10,10,5);
-  water = new Water(S_W*10,-S_H*10,80,80,"Img/water.png",ren,0,0);
+  water = new Water(S_W*10,-S_H*10,100,10,"Img/water_line.png",ren,0,0);
   vect_smoke.push_back(new Smoke(S_W-100,130,100,100,"Img/fire.png",ren,-20,-20,3));
   vect_smoke.push_back(new Smoke(0,130,100,100,"Img/fire.png",ren,20,-20,3));
   font = TTF_OpenFont("font/Sans.ttf", 24);
   end_game=false;
+  score=0;
   loop();
 }
 
@@ -52,10 +54,12 @@ void Game::update(){
     }
     else if(water->collision(vect_smoke[i])){
       if((vect_smoke[i]->getsize())-1!=0){
-        vect_smoke.push_back(new Smoke(vect_smoke[i]->getx(),vect_smoke[i]->gety(),(vect_smoke[i]->geth())/2,(vect_smoke[i]->getw())/2,"Img/fire.png",ren,-vect_smoke[i]->getvx(),vect_smoke[i]->getvy(),vect_smoke[i]->getsize()-1));
+        vect_smoke.push_back(new Smoke(vect_smoke[i]->getx(),vect_smoke[i]->gety()-50,(vect_smoke[i]->geth())/2,(vect_smoke[i]->getw())/2,"Img/fire.png",ren,-vect_smoke[i]->getvx(),vect_smoke[i]->getvy(),vect_smoke[i]->getsize()-1));
         vect_smoke[i]->seth((vect_smoke[i]->geth())/2);
         vect_smoke[i]->setw((vect_smoke[i]->getw())/2);
+        vect_smoke[i]->sety(vect_smoke[i]->gety()-50);
         vect_smoke[i]->setsize((vect_smoke[i]->getsize())-1);
+        score+=500;
       }
       else
         vect_smoke.erase(vect_smoke.begin()+i);
@@ -100,7 +104,9 @@ void Game::render() {
 
   draw(wallpaper);
   draw(avatar);
-  draw("Score: 0", 20, 30, 0, 255, 0);
+  char tampon [16] ;
+  sprintf(tampon, "Score: %d", score);
+  draw(tampon, 20, 30, 0, 255, 0);
   for(size_t i=0;i<vect_smoke.size();i++){
     draw(vect_smoke[i]);
   }

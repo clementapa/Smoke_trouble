@@ -37,6 +37,7 @@ private:
   vector<Smoke*> vect_smoke;
   Water* water;
   bool end_game;
+  int score;
 };
 
 #endif //GAME_H
