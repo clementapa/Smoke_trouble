@@ -35,6 +35,9 @@ private:
   Object* wallpaper;
   Object* Heart;
   Object* Ground;
+  Object* GameOver;
+
+  //Object* Congrats;
   int mousex, mousey;
   Avatar* avatar;
   Water* water;

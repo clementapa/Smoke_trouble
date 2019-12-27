@@ -14,9 +14,12 @@ Game::Game() {
   wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/wallpaper4.jpg",ren);
   Ground=new Object(0,S_H-67,67,S_W,"Img/sol.jpg",ren);
   Heart=new Object(10,10,30,30,"Img/Heart2.png",ren);
-  avatar = new Avatar(S_W/2-40,S_H-G_H-123,123,66,"Img/pompier.png",ren,10,10,5);
+  //Congrats=new Object(S_W/2-250,S_H/2-300,400,500,"Img/Congrats.png",ren);
+  GameOver=new Object(S_W/2-250,S_H/2-300,400,500,"Img/GameOver2.png",ren);
 
-  water = new Water(S_W*10,-S_H*10,480,10,"Img/water_line.png",ren,0,0);
+  avatar = new Avatar(S_W/2-40,S_H-G_H-123,123,66,"Img/pompier.png",ren,15,10,5);
+
+  water = new Water(S_W*10,-S_H*10,600,10,"Img/water_line.png",ren,0,0);
 
   vect_smoke.push_back(new Smoke(S_W-100,100,100,100,"Img/fire.png",ren,-20,-20,3));
   vect_smoke.push_back(new Smoke(0,100,100,100,"Img/fire.png",ren,20,-20,3));
@@ -24,7 +27,7 @@ Game::Game() {
   for(int i=0;i<6;i++)
     reserve_smoke.push_back(new Smoke(0,0,0,0,"Img/fire.png",ren,0,0,3));
 
-  font = TTF_OpenFont("font/Sans.ttf", 24);
+  font = TTF_OpenFont("font/Sans3.ttf", 24);
   end_game=false;
   score=0;
     loop();
@@ -93,8 +96,8 @@ void Game::loop() {
     }
 
   //  cout << mousex << ", " << mousey << endl;
-    render();
     input();
+    render();
     update();
   }
 }
@@ -191,9 +194,14 @@ void Game::render() {
   for(size_t i=0;i<vect_smoke.size();i++){
     draw(vect_smoke[i]);
   }
-
+  //avatar->setlive(0);
   if(avatar->getlive()==0){
-    draw("GAME OVER", S_H/2, S_W/2, 0, 100, 0);
+    //draw("GAME OVER", S_H/2, S_W/2, 0, 100, 0);
+    draw(GameOver);
+    //draw("GAME OVER", S_W/2-80,S_H/2+75 , 250, 0, 0);
+    char tampon2 [30] ;
+    sprintf(tampon2, "Your Score is %d", score);
+    draw(tampon2, S_W/2-100, S_H/2+110, 0, 100, 0);
   }
 
   frameCount++;
