@@ -36,6 +36,7 @@ private:
   Avatar* avatar;
   vector<Smoke*> vect_smoke;
   Water* water;
+  bool end_game;
 };
 
 #endif //GAME_H

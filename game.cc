@@ -11,10 +11,10 @@ Game::Game() {
   wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/image.png",ren);
   avatar = new Avatar(S_W/2-40,S_H-80,80,80,"Img/pompier.png",ren,10,10,5);
   water = new Water(S_W*10,-S_H*10,80,80,"Img/water.png",ren,0,0);
-  vect_smoke.push_back(new Smoke(S_W-100,130,100,100,"Img/fire.png",ren,-20,-20,5));
-  vect_smoke.push_back(new Smoke(0,130,100,100,"Img/fire.png",ren,20,-20,5));
+  vect_smoke.push_back(new Smoke(S_W-100,130,100,100,"Img/fire.png",ren,-20,-20,3));
+  vect_smoke.push_back(new Smoke(0,130,100,100,"Img/fire.png",ren,20,-20,3));
   font = TTF_OpenFont("font/Sans.ttf", 24);
-
+  end_game=false;
   loop();
 }
 
@@ -43,23 +43,28 @@ void Game::loop() {
 }
 
 void Game::update(){
-  for(int i=0;i<2;i++){
+  for(size_t i=0;i<vect_smoke.size();i++){
     vect_smoke[i]->update(S_H,S_W);
     if(avatar->collision(vect_smoke[i])){
       avatar->setlive(avatar->getlive()-1);
-      cout<<"mois 1 vie"<<endl;
+      if(avatar->getlive()==0)
+              end_game=true;
     }
     else if(water->collision(vect_smoke[i])){
-
-      vect_smoke.push_back(new Smoke(vect_smoke[i]->getx(),vect_smoke[i]->gety(),(vect_smoke[i]->geth())/2,(vect_smoke[i]->getw())/2,"Img/fire.png",ren,vect_smoke[i]->getvx(),vect_smoke[i]->getvy(),vect_smoke[i]->getsize()-1));
-      vect_smoke.push_back(new Smoke(-vect_smoke[i]->getx(),vect_smoke[i]->gety(),(vect_smoke[i]->geth())/2,(vect_smoke[i]->getw())/2,"Img/fire.png",ren,vect_smoke[i]->getvx(),vect_smoke[i]->getvy(),vect_smoke[i]->getsize()-1));
-      vect_smoke.erase (vect_smoke.begin()+i);
+      if((vect_smoke[i]->getsize())-1!=0){
+        vect_smoke.push_back(new Smoke(vect_smoke[i]->getx(),vect_smoke[i]->gety(),(vect_smoke[i]->geth())/2,(vect_smoke[i]->getw())/2,"Img/fire.png",ren,-vect_smoke[i]->getvx(),vect_smoke[i]->getvy(),vect_smoke[i]->getsize()-1));
+        vect_smoke[i]->seth((vect_smoke[i]->geth())/2);
+        vect_smoke[i]->setw((vect_smoke[i]->getw())/2);
+        vect_smoke[i]->setsize((vect_smoke[i]->getsize())-1);
+      }
+      else
+        vect_smoke.erase(vect_smoke.begin()+i);
       water->setx(S_W*10);
       water->sety(-S_H*10);
     }
-  }
   avatar->update(S_H,S_W);
   water->update(S_H,S_W);
+  }
 }
 
 void Game::input() {
@@ -68,18 +73,19 @@ void Game::input() {
     if(e.type == SDL_QUIT) {running=false; cout << "Quitting" << endl;}
     if(e.type == SDL_KEYDOWN) {
       if(e.key.keysym.sym == SDLK_ESCAPE) running=false;
-      if(e.key.keysym.sym == SDLK_SPACE){
+      if(e.key.keysym.sym == SDLK_SPACE && end_game==false){
         if(water->gety()<0){
-          water->setx(avatar->getx());
+          water->setx(avatar->getx() + avatar->getw()/2 - water->getw()/2);
           water->sety(avatar->gety());
           water->setvx(0.0);
           water->setvy(-10.0);
+
         }
       }
-      if(e.key.keysym.sym == SDLK_q) {
+      if(e.key.keysym.sym == SDLK_q && end_game==false) {
         avatar->setx(avatar->getx()-avatar->getvx());
       }
-      else if(e.key.keysym.sym == SDLK_d) {
+      else if(e.key.keysym.sym == SDLK_d && end_game==false) {
         avatar->setx(avatar->getx()+avatar->getvy());
       }
     }
@@ -95,8 +101,9 @@ void Game::render() {
   draw(wallpaper);
   draw(avatar);
   draw("Score: 0", 20, 30, 0, 255, 0);
-  draw(vect_smoke[0]);
-  draw(vect_smoke[1]);
+  for(size_t i=0;i<vect_smoke.size();i++){
+    draw(vect_smoke[i]);
+  }
   draw(water);
 
   if(avatar->getlive()==0){

@@ -32,7 +32,9 @@ class Object{
     int getw() const {return w;}
     int geth() const {return h;}
     void setx(float new_x){x=new_x;}
-    void sety(float new_y){y=new_y;}    
+    void sety(float new_y){y=new_y;}
+    void setw(float new_w){w=new_w;}
+    void seth(float new_h){h=new_h;}         
     SDL_Texture* getText() const {return texture;}
 
 };
