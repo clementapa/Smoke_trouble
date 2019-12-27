@@ -23,6 +23,7 @@ public:
   void update();
   void input();
   void render();
+  void init();
   void draw(Object* o);
   void draw(const char* msg, int x, int y, int r, int g, int b);
 private:

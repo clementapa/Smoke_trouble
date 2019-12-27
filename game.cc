@@ -1,6 +1,7 @@
 #include <string>
 #include "game.hh"
 using namespace std;
+int count=0;
 
 Game::Game() {
   SDL_Init(0);
@@ -16,7 +17,7 @@ Game::Game() {
   vect_smoke.push_back(new Smoke(S_W-100,130,100,100,"Img/fire.png",ren,-20,-20,3));
   vect_smoke.push_back(new Smoke(0,130,100,100,"Img/fire.png",ren,20,-20,3));
 
-  for(int i=0;i<10;i++)
+  for(int i=0;i<20;i++)
     reserve_smoke.push_back(new Smoke(0,0,0,0,"Img/fire.png",ren,0,0,3));
 
   font = TTF_OpenFont("font/Sans.ttf", 24);
@@ -24,6 +25,24 @@ Game::Game() {
   score=0;
   loop();
 }
+void Game::init(){
+  count=0;
+  std::cout << "init" << '\n';
+  size_t size=vect_smoke.size();
+  for(size_t i=0;i<size;i++){
+    vect_smoke.erase(vect_smoke.begin());
+    std::cout << "for" << '\n';
+  }
+  avatar->setx(S_W/2-40);
+  /*for(int i=0;i<6;i++){
+    reserve_smoke.push_back(new Smoke(0,0,0,0,"Img/fire.png",ren,0,0,3));
+    std::cout << "reserve" << '\n';
+  }*/
+  vect_smoke.push_back(new Smoke(S_W-100,130,100,100,"Img/fire.png",ren,-20,-20,3));
+  vect_smoke.push_back(new Smoke(0,130,100,100,"Img/fire.png",ren,20,-20,3));
+
+}
+
 
 Game::~Game() {
   TTF_Quit();
@@ -50,10 +69,12 @@ void Game::loop() {
 }
 
 void Game::update(){
+
   for(size_t i=0;i<vect_smoke.size();i++){
     vect_smoke[i]->update(S_H,S_W);
   if(avatar->collision(vect_smoke[i])){
     avatar->setlive(avatar->getlive()-1);
+    init();
   }
   else if(water->collision(vect_smoke[i])){
       if((vect_smoke[i]->getsize())-1!=0){
@@ -63,7 +84,7 @@ void Game::update(){
         reserve_smoke.front()->seth(vect_smoke[i]->geth()/2);
         reserve_smoke.front()->setw(vect_smoke[i]->getw()/2);
         reserve_smoke.front()->setvx(-vect_smoke[i]->getvx());
-        reserve_smoke.front()->setvy(vect_smoke[i]->getvy());
+        reserve_smoke.front()->setvy(-10);
         reserve_smoke.front()->setsize(vect_smoke[i]->getsize()-1);
         vect_smoke.push_back(reserve_smoke.front());
 
@@ -72,11 +93,17 @@ void Game::update(){
         vect_smoke[i]->seth((vect_smoke[i]->geth())/2);
         vect_smoke[i]->setw((vect_smoke[i]->getw())/2);
         vect_smoke[i]->sety(vect_smoke[i]->gety()-50);
+        vect_smoke[i]->setvy(-10);
         vect_smoke[i]->setsize((vect_smoke[i]->getsize())-1);
       }
-      else
+      else{
         vect_smoke.erase(vect_smoke.begin()+i);
+        count++;
+      }
+      if (count==8) {
+        init();
 
+      }
       score+=500;
       water->setx(S_W*10);
       water->sety(-S_H*10);
