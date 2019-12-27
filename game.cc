@@ -13,8 +13,13 @@ Game::Game() {
   avatar = new Avatar(S_W/2-40,S_H-80,80,80,"Img/pompier.png",ren,10,10,5);
   water = new Water(S_W*10,-S_H*10,480,10,"Img/water_line.png",ren,0,0);
 
-  vect_smoke.push_back(new Smoke(S_W-100,130,100,100,"Img/fire.png",ren,-20,-20,3));
-  vect_smoke.push_back(new Smoke(0,130,100,100,"Img/fire.png",ren,20,-20,3));
+  count_smoke_3=count_smoke_2=count_smoke_1=0;
+  for(size_t i=0;i<NB_SMOKE;i++)
+    vect_smoke_3.push_back(new Smoke(S_W-100,130,"Img/fire.png",ren,3));
+  for(size_t i=0;i<NB_SMOKE*2;i++)
+    vect_smoke_2.push_back(new Smoke(S_W*10,S_H*10,"Img/fire.png",ren,2));
+  for(size_t i=0;i<NB_SMOKE*4;i++)
+    vect_smoke_3.push_back(new Smoke(S_W*10,S_H*10,"Img/fire.png",ren,1));
 
   font = TTF_OpenFont("font/Sans.ttf", 24);
   end_game=false;
@@ -47,25 +52,28 @@ void Game::loop() {
 }
 
 void Game::update(){
-  for(size_t i=0;i<vect_smoke.size();i++){
-    vect_smoke[i]->update(S_H,S_W);
-    if(avatar->collision(vect_smoke[i])){
+  int temp=1;
+  for(size_t i=0;i<vect_smoke_3.size();i++){
+    vect_smoke_3[i]->update(S_H,S_W);
+
+    if(avatar->collision(vect_smoke_3[i])){
       avatar->setlive(avatar->getlive()-1);
       if(avatar->getlive()==0)
               end_game=true;
     }
-    else if(water->collision(vect_smoke[i])){
-      if((vect_smoke[i]->getsize())-1!=0){
-        //vect_smoke.push_back(new Smoke(vect_smoke[i]->getx(),40,(vect_smoke[i]->geth())/2,(vect_smoke[i]->getw())/2,"Img/fire.png",ren,-vect_smoke[i]->getvx(),vect_smoke[i]->getvy(),vect_smoke[i]->getsize()-1));
-        vect_smoke[i]->seth((vect_smoke[i]->geth())/2);
-        vect_smoke[i]->setw((vect_smoke[i]->getw())/2);
-        vect_smoke[i]->sety(40);
-        vect_smoke[i]->setvy(-20);
-        vect_smoke[i]->setsize((vect_smoke[i]->getsize())-1);
+    else if(water->collision(vect_smoke_3[i])){
+      for(int j=count_smoke_3;j<count_smoke_3+2;j++){
+        vect_smoke_2[i]->sety(vect_smoke_3[i]->gety());
+        vect_smoke_2[i]->sety(vect_smoke_3[i]->gety());
+        if(temp==-1)
+          vect_smoke_2[i]->setvx(vect_smoke_2[i]->getvx()*-1);
+        count_smoke_3+=2;
+        temp*=-1;
       }
-      else{
-        vect_smoke.erase(vect_smoke.begin()+i);
-      }
+      vect_smoke_3[i]->setx(S_H*10);//
+      vect_smoke_3[i]->sety(S_H*10);// on la met hors du screen
+      vect_smoke_3[i]->setvx(0);
+      vect_smoke_3[i]->setvy(0);// on la bloque
       score+=500;
       water->setx(S_W*10);
       water->sety(-S_H*10);
@@ -110,8 +118,14 @@ void Game::render() {
   char tampon [16] ;
   sprintf(tampon, "Score: %d", score);
   draw(tampon, 20, 30, 0, 255, 0);
-  for(size_t i=0;i<vect_smoke.size();i++){
-    draw(vect_smoke[i]);
+  for(size_t i=0;i<vect_smoke_3.size();i++){
+    draw(vect_smoke_3[i]);
+  }
+  for(size_t i=0;i<vect_smoke_2.size();i++){
+    draw(vect_smoke_2[i]);
+  }
+  for(size_t i=0;i<vect_smoke_1.size();i++){
+    draw(vect_smoke_1[i]);
   }
 
   if(avatar->getlive()==0){
