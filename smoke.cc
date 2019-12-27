@@ -19,23 +19,23 @@ void Smoke::update(int s_w, int s_h){
   x+=vx*DT;
   y+=vy*DT;
 
-  if(y<=0.0 || y+h>=s_w){//sol et haut
+  if(y<=0.0 || y+h>=s_h){//sol et haut
     vx*=1;
     vy*=-0.85;
     if(y<=0.0)
       y=0;
     else{
-      y=s_w-h;
+      y=s_h-h ;
       vy=-80;
     }
   }
-  else if(x<=0.0|| x+w>=s_h){
+  else if(x<=0.0|| x+w>=s_w){
     vx*=-1;
     vy*=0.95;
     if(x<=0.0)
       x=0;
     else
-      x=s_h-w;
+      x=s_w-w;
     }
 
 }

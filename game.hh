@@ -12,9 +12,9 @@ using namespace std;
 #include "smoke.hh"
 #include "water.hh"
 
-#define S_W 720
-#define S_H 480
-
+#define S_W 1366
+#define S_H 768
+#define G_H 63
 class Game {
 public:
   Game();
@@ -34,6 +34,7 @@ private:
   int frameCount, timerFPS, lastFrame;
   Object* wallpaper;
   Object* Heart;
+  Object* Ground;
   int mousex, mousey;
   Avatar* avatar;
   Water* water;

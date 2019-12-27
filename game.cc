@@ -2,6 +2,7 @@
 #include "game.hh"
 using namespace std;
 
+
 Game::Game() {
   SDL_Init(0);
   SDL_CreateWindowAndRenderer(S_W, S_H, 0, &win, &ren);//w=480(largeur) h=720 longueur
@@ -9,14 +10,15 @@ Game::Game() {
   TTF_Init();
   running=true;
 
-  wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/wallpaper2.jpg",ren);
+  wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/wallpaper4.jpg",ren);
+  Ground=new Object(0,S_H-67,67,S_W,"Img/sol.jpg",ren);
+  Heart=new Object(10,10,30,30,"Img/Heart2.png",ren);
+  avatar = new Avatar(S_W/2-40,S_H-G_H-123,123,66,"Img/pompier.png",ren,10,10,5);
 
-  Heart=new Object(10,10,30,30,"Img/Heart.png",ren);
-  avatar = new Avatar(S_W/2-40,S_H-80,80,80,"Img/pompier.png",ren,10,10,5);
   water = new Water(S_W*10,-S_H*10,480,10,"Img/water_line.png",ren,0,0);
 
-  vect_smoke.push_back(new Smoke(S_W-100,130,100,100,"Img/fire.png",ren,-20,-20,3));
-  vect_smoke.push_back(new Smoke(0,130,100,100,"Img/fire.png",ren,20,-20,3));
+  vect_smoke.push_back(new Smoke(S_W-100,100,100,100,"Img/fire.png",ren,-20,-20,3));
+  vect_smoke.push_back(new Smoke(0,100,100,100,"Img/fire.png",ren,20,-20,3));
 
   for(int i=0;i<6;i++)
     reserve_smoke.push_back(new Smoke(0,0,0,0,"Img/fire.png",ren,0,0,3));
@@ -44,7 +46,7 @@ void Game::init(){
 /*je prend les deux premieres balles de la reserve et je les transforment en grandes balles*/
 /*puis je les push dans vect smoke*/
   reserve_smoke.front()->setx(S_W-100);
-  reserve_smoke.front()->sety(130);
+  reserve_smoke.front()->sety(100);
   reserve_smoke.front()->seth(100);
   reserve_smoke.front()->setw(100);
   reserve_smoke.front()->setvx(-20);
@@ -55,7 +57,7 @@ void Game::init(){
   reserve_smoke.erase(reserve_smoke.begin());
 
   reserve_smoke.front()->setx(0);
-  reserve_smoke.front()->sety(130);
+  reserve_smoke.front()->sety(100);
   reserve_smoke.front()->seth(100);
   reserve_smoke.front()->setw(100);
   reserve_smoke.front()->setvx(20);
@@ -99,7 +101,7 @@ void Game::loop() {
 void Game::update(){
 
   for(size_t i=0;i<vect_smoke.size();i++){
-    vect_smoke[i]->update(S_H,S_W);
+    vect_smoke[i]->update(S_W,S_H-G_H);
   if(avatar->collision(vect_smoke[i])){
     avatar->setlive(avatar->getlive()-1);
     init();
@@ -151,7 +153,7 @@ void Game::input() {
       if(e.key.keysym.sym == SDLK_SPACE && end_game==false){
         if(water->gety()<0){
           water->setx(avatar->getx() + avatar->getw()/2 - water->getw()/2);
-          water->sety(avatar->gety());
+          water->sety(avatar->gety()-G_H);
           water->setvy(-10.0);
         }
       }
@@ -173,6 +175,7 @@ void Game::render() {
 
   draw(wallpaper);
   draw(water);
+  draw(Ground);
   for (int i = 0; i < avatar->getlive(); i++) {
     draw(Heart);
     Heart->setx(Heart->getx()+30);
@@ -183,13 +186,13 @@ void Game::render() {
 
   char tampon [16] ;
   sprintf(tampon, "Score: %d", score);
-  draw(tampon, S_W-175, 0, 0, 255, 0);
+  draw(tampon, S_W-175, 0, 0, 100, 0);
   for(size_t i=0;i<vect_smoke.size();i++){
     draw(vect_smoke[i]);
   }
 
   if(avatar->getlive()==0){
-    draw("GAME OVER", S_H/2, S_W/2, 0, 255, 0);
+    draw("GAME OVER", S_H/2, S_W/2, 0, 100, 0);
   }
 
   frameCount++;
