@@ -13,7 +13,6 @@ using namespace std;
 
 #define S_W 720
 #define S_H 480
-#define NB_SMOKE 2
 
 class Game {
 public:
@@ -38,12 +37,7 @@ private:
   Water* water;
   bool end_game;
   int score;
-  vector<Smoke*> vect_smoke_3;
-  int count_smoke_3;
-  vector<Smoke*> vect_smoke_2;
-  int count_smoke_2;
-  vector<Smoke*> vect_smoke_1;
-  int count_smoke_1;
+  vector<Smoke*> vect_smoke;
 };
 
 #endif //GAME_H
