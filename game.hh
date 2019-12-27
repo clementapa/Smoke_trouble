@@ -31,9 +31,9 @@ private:
   SDL_Window* win;
   TTF_Font *font;
   bool running;
-  int count;
   int frameCount, timerFPS, lastFrame;
   Object* wallpaper;
+  Object* Heart;
   int mousex, mousey;
   Avatar* avatar;
   Water* water;

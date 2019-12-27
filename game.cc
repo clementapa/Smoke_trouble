@@ -1,51 +1,79 @@
 #include <string>
 #include "game.hh"
 using namespace std;
-int count=0;
 
 Game::Game() {
   SDL_Init(0);
   SDL_CreateWindowAndRenderer(S_W, S_H, 0, &win, &ren);//w=480(largeur) h=720 longueur
-  SDL_SetWindowTitle(win, "Smoke trouble!!!");
+  SDL_SetWindowTitle(win, "Fire trouble!!!");
   TTF_Init();
   running=true;
-  count=0;
-  wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/image.png",ren);
+
+  wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/wallpaper2.jpg",ren);
+
+  Heart=new Object(10,10,30,30,"Img/Heart.png",ren);
   avatar = new Avatar(S_W/2-40,S_H-80,80,80,"Img/pompier.png",ren,10,10,5);
   water = new Water(S_W*10,-S_H*10,480,10,"Img/water_line.png",ren,0,0);
 
   vect_smoke.push_back(new Smoke(S_W-100,130,100,100,"Img/fire.png",ren,-20,-20,3));
   vect_smoke.push_back(new Smoke(0,130,100,100,"Img/fire.png",ren,20,-20,3));
 
-  for(int i=0;i<20;i++)
+  for(int i=0;i<6;i++)
     reserve_smoke.push_back(new Smoke(0,0,0,0,"Img/fire.png",ren,0,0,3));
 
   font = TTF_OpenFont("font/Sans.ttf", 24);
   end_game=false;
   score=0;
-  loop();
+    loop();
 }
+
+
 void Game::init(){
-  count=0;
+
   std::cout << "init" << '\n';
+/*Je vide mon vect smoke en mettant les balles dans la reserve*/
   size_t size=vect_smoke.size();
   for(size_t i=0;i<size;i++){
-    vect_smoke.erase(vect_smoke.begin());
+    reserve_smoke.push_back(vect_smoke[i]);
     std::cout << "for" << '\n';
   }
+      vect_smoke.clear();
+  /*je remets l avatar au milieu du jeu*/
   avatar->setx(S_W/2-40);
-  /*for(int i=0;i<6;i++){
-    reserve_smoke.push_back(new Smoke(0,0,0,0,"Img/fire.png",ren,0,0,3));
-    std::cout << "reserve" << '\n';
-  }*/
-  vect_smoke.push_back(new Smoke(S_W-100,130,100,100,"Img/fire.png",ren,-20,-20,3));
-  vect_smoke.push_back(new Smoke(0,130,100,100,"Img/fire.png",ren,20,-20,3));
 
+/*je prend les deux premieres balles de la reserve et je les transforment en grandes balles*/
+/*puis je les push dans vect smoke*/
+  reserve_smoke.front()->setx(S_W-100);
+  reserve_smoke.front()->sety(130);
+  reserve_smoke.front()->seth(100);
+  reserve_smoke.front()->setw(100);
+  reserve_smoke.front()->setvx(-20);
+  reserve_smoke.front()->setvy(-20);
+  reserve_smoke.front()->setsize(3);
+
+  vect_smoke.push_back(reserve_smoke.front());
+  reserve_smoke.erase(reserve_smoke.begin());
+
+  reserve_smoke.front()->setx(0);
+  reserve_smoke.front()->sety(130);
+  reserve_smoke.front()->seth(100);
+  reserve_smoke.front()->setw(100);
+  reserve_smoke.front()->setvx(20);
+  reserve_smoke.front()->setvy(-20);
+  reserve_smoke.front()->setsize(3);
+
+  vect_smoke.push_back(reserve_smoke.front());
+  reserve_smoke.erase(reserve_smoke.begin());
+
+  /*vect_smoke.push_back(new Smoke(S_W-100,130,100,100,"Img/fire.png",ren,-20,-20,3));
+  vect_smoke.push_back(new Smoke(0,130,100,100,"Img/fire.png",ren,20,-20,3));
+*/
 }
 
 
 Game::~Game() {
   TTF_Quit();
+
   SDL_DestroyRenderer(ren);
   SDL_DestroyWindow(win);
   SDL_Quit();
@@ -97,10 +125,11 @@ void Game::update(){
         vect_smoke[i]->setsize((vect_smoke[i]->getsize())-1);
       }
       else{
+        reserve_smoke.push_back(vect_smoke[i]);
         vect_smoke.erase(vect_smoke.begin()+i);
-        count++;
+
       }
-      if (count==8) {
+      if (vect_smoke.empty()) {
         init();
 
       }
@@ -144,10 +173,17 @@ void Game::render() {
 
   draw(wallpaper);
   draw(water);
+  for (int i = 0; i < avatar->getlive(); i++) {
+    draw(Heart);
+    Heart->setx(Heart->getx()+30);
+  }
+  Heart->setx(10);
+
   draw(avatar);
+
   char tampon [16] ;
   sprintf(tampon, "Score: %d", score);
-  draw(tampon, 20, 30, 0, 255, 0);
+  draw(tampon, S_W-175, 0, 0, 255, 0);
   for(size_t i=0;i<vect_smoke.size();i++){
     draw(vect_smoke[i]);
   }
