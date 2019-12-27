@@ -9,7 +9,6 @@ class Water: public Object_Dynamic{
     Water(float x, float y, int h, int w, string filename, SDL_Renderer* ren, float vx, float vy);
     ~Water(){}
 
-    void collision(Object* o);
     void update(int w,int h);
 };
 

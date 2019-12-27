@@ -45,7 +45,18 @@ void Game::loop() {
 void Game::update(){
   for(int i=0;i<2;i++){
     vect_smoke[i]->update(S_H,S_W);
-    avatar->collision(vect_smoke[i]);
+    if(avatar->collision(vect_smoke[i])){
+      avatar->setlive(avatar->getlive()-1);
+      cout<<"mois 1 vie"<<endl;
+    }
+    else if(water->collision(vect_smoke[i])){
+
+      vect_smoke.push_back(new Smoke(vect_smoke[i]->getx(),vect_smoke[i]->gety(),(vect_smoke[i]->geth())/2,(vect_smoke[i]->getw())/2,"Img/fire.png",ren,vect_smoke[i]->getvx(),vect_smoke[i]->getvy(),vect_smoke[i]->getsize()-1));
+      vect_smoke.push_back(new Smoke(-vect_smoke[i]->getx(),vect_smoke[i]->gety(),(vect_smoke[i]->geth())/2,(vect_smoke[i]->getw())/2,"Img/fire.png",ren,vect_smoke[i]->getvx(),vect_smoke[i]->getvy(),vect_smoke[i]->getsize()-1));
+      vect_smoke.erase (vect_smoke.begin()+i);
+      water->setx(S_W*10);
+      water->sety(-S_H*10);
+    }
   }
   avatar->update(S_H,S_W);
   water->update(S_H,S_W);
@@ -87,6 +98,10 @@ void Game::render() {
   draw(vect_smoke[0]);
   draw(vect_smoke[1]);
   draw(water);
+
+  if(avatar->getlive()==0){
+    draw("GAME OVER", S_H/2, S_W/2, 0, 255, 0);
+  }
 
   frameCount++;
   int timerFPS = SDL_GetTicks()-lastFrame;

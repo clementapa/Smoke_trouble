@@ -18,7 +18,7 @@ class Object_Dynamic: public Object{
     void setvx(float new_vx){vx=new_vx;}
     void setvy(float new_vy){vy=new_vy;}
 
-    virtual void collision(Object* o) = 0;
+    bool collision(Object* o);
     virtual void update(int w,int h) = 0;
 };
 
