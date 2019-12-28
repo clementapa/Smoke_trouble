@@ -167,6 +167,12 @@ void Game::input() {
       else if(e.key.keysym.sym == SDLK_d && end_game==false) {
         avatar->setx(avatar->getx()+avatar->getvy());
       }
+      else if(e.key.keysym.sym == SDLK_r && avatar->getlive()==0) {
+        avatar->setlive(5);
+        score=0;
+        init();
+      }
+
     }
     if(e.type == SDL_KEYUP) {
       if(e.key.keysym.sym == SDLK_q) {}
@@ -202,6 +208,10 @@ void Game::render() {
     char tampon2 [30] ;
     sprintf(tampon2, "Your Score is %d", score);
     draw(tampon2, S_W/2-100, S_H/2+110, 0, 100, 0);
+
+    char tampon3 [30] ;
+    sprintf(tampon3, "Press r for restart !!");
+    draw(tampon3, S_W/2-115, S_H/2+135, 0, 100, 0);
   }
 
   frameCount++;
