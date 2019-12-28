@@ -142,7 +142,7 @@ void Game::update(){
         init();
         round++;
       }
-      score+=500;
+      score+=500*round;
       water->setx(S_W*10);
       water->sety(-S_H*10);
     }
@@ -173,6 +173,7 @@ void Game::input() {
       else if(e.key.keysym.sym == SDLK_r && end_game==true) {
         avatar->setlive(5);
         score=0;
+        round=1;
         end_game=false;
         init();
       }
@@ -201,6 +202,10 @@ void Game::render() {
   char tampon [16] ;
   sprintf(tampon, "Score: %d", score);
   draw(tampon, S_W-175, 0, 0, 100, 0);
+
+  sprintf(tampon, "Round: %d", round);
+  draw(tampon, S_W-175, 50, 0, 100, 0);
+
   for(size_t i=0;i<vect_smoke.size();i++){
     draw(vect_smoke[i]);
   }
@@ -213,9 +218,12 @@ void Game::render() {
     sprintf(tampon2, "Your Score is %d", score);
     draw(tampon2, S_W/2-100, S_H/2+110, 0, 100, 0);
 
+    sprintf(tampon2, "Round: %d", round);
+    draw(tampon2,S_W/2-50, S_H/2+80, 0, 100, 0);
+
     char tampon3 [30] ;
     sprintf(tampon3, "Press r for restart !!");
-    draw(tampon3, S_W/2-115, S_H/2+135, 0, 100, 0);
+    draw(tampon3, S_W/2-130, S_H/2+135, 0, 100, 0);
   }
 
   frameCount++;
