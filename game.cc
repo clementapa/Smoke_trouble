@@ -43,7 +43,7 @@ void Game::init(){
     reserve_smoke.push_back(vect_smoke[i]);
     std::cout << "for" << '\n';
   }
-      vect_smoke.clear();
+  vect_smoke.clear();
   /*je remets l avatar au milieu du jeu*/
   avatar->setx(S_W/2-40);
 
@@ -108,7 +108,10 @@ void Game::update(){
     vect_smoke[i]->update(S_W,S_H-G_H);
   if(avatar->collision(vect_smoke[i])){
     avatar->setlive(avatar->getlive()-1);
-    init();
+    if(avatar->getlive()==0)
+      end_game=true;
+    else
+      init();
   }
   else if(water->collision(vect_smoke[i])){
       if((vect_smoke[i]->getsize())-1!=0){
@@ -167,9 +170,10 @@ void Game::input() {
       else if(e.key.keysym.sym == SDLK_d && end_game==false) {
         avatar->setx(avatar->getx()+avatar->getvy());
       }
-      else if(e.key.keysym.sym == SDLK_r && avatar->getlive()==0) {
+      else if(e.key.keysym.sym == SDLK_r && end_game==true) {
         avatar->setlive(5);
         score=0;
+        end_game=false;
         init();
       }
 
@@ -201,7 +205,7 @@ void Game::render() {
     draw(vect_smoke[i]);
   }
   //avatar->setlive(0);
-  if(avatar->getlive()==0){
+  if(end_game==true){
     //draw("GAME OVER", S_H/2, S_W/2, 0, 100, 0);
     draw(GameOver);
     //draw("GAME OVER", S_W/2-80,S_H/2+75 , 250, 0, 0);
