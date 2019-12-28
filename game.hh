@@ -11,9 +11,10 @@ using namespace std;
 #include "avatar.hh"
 #include "smoke.hh"
 #include "water.hh"
+#include "bonus.hh"
 
 #define S_W 1366
-#define S_H 768
+#define S_H 600//768
 #define G_H 63
 class Game {
 public:
@@ -46,6 +47,7 @@ private:
   int round;
   vector<Smoke*> vect_smoke;
   list<Smoke*> reserve_smoke;
+  list<Bonus*> list_bonus;
 };
 
 #endif //GAME_H

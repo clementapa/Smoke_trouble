@@ -27,6 +27,8 @@ Game::Game() {
   for(int i=0;i<6;i++)
     reserve_smoke.push_back(new Smoke(0,0,0,0,"Img/fire.png",ren,0,0,3));
 
+  list_bonus.push_back(new Bonus(10,10,100,100,"Img/Shield.png",ren,5,10));
+
   font = TTF_OpenFont("font/Sans3.ttf", 24);
   end_game=false;
   score=0;
@@ -149,6 +151,7 @@ void Game::update(){
   }
   avatar->update(S_H,S_W);
   water->update(S_H,S_W);
+  list_bonus.front()->update(S_H,S_W);
 }
 
 void Game::input() {
@@ -198,6 +201,7 @@ void Game::render() {
   Heart->setx(10);
 
   draw(avatar);
+  draw(list_bonus.front());
 
   char tampon [16] ;
   sprintf(tampon, "Score: %d", score);
