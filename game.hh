@@ -7,11 +7,17 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 #include "avatar.hh"
 #include "smoke.hh"
 #include "water.hh"
 #include "bonus.hh"
+#include "coin.hh"
+#include "shield.hh"
+#include "multiplier.hh"
+
 
 #define S_W 1366
 #define S_H 600//768
@@ -47,7 +53,8 @@ private:
   int round;
   vector<Smoke*> vect_smoke;
   list<Smoke*> reserve_smoke;
-  list<Bonus*> list_bonus;
+  vector<Bonus*> reserve_bonus;
+  vector<Bonus*> vect_bonus;
 };
 
 #endif //GAME_H

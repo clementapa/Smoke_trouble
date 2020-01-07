@@ -2,6 +2,11 @@
 #include "game.hh"
 using namespace std;
 
+//int temp=3;
+
+int tirage_aleatoire(size_t size_vect){
+  return rand()%size_vect;
+}
 
 Game::Game() {
   SDL_Init(0);
@@ -12,10 +17,10 @@ Game::Game() {
   round=1;
 
   wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/wallpaper4.jpg",ren);
-  Ground=new Object(0,S_H-67,67,S_W,"Img/sol.jpg",ren);
-  Heart=new Object(10,10,30,30,"Img/Heart2.png",ren);
+  Ground = new Object(0,S_H-67,67,S_W,"Img/sol.jpg",ren);
+  Heart = new Object(10,10,30,30,"Img/Heart2.png",ren);
   //Congrats=new Object(S_W/2-250,S_H/2-300,400,500,"Img/Congrats.png",ren);
-  GameOver=new Object(S_W/2-250,S_H/2-300,400,500,"Img/GameOver2.png",ren);
+  GameOver = new Object(S_W/2-250,S_H/2-300,400,500,"Img/GameOver2.png",ren);
 
   avatar = new Avatar(S_W/2-40,S_H-G_H-123,123,66,"Img/pompier.png",ren,15,10,5);
 
@@ -25,9 +30,17 @@ Game::Game() {
   vect_smoke.push_back(new Smoke(0,100,100,100,"Img/fire.png",ren,20,-20,3));
 
   for(int i=0;i<6;i++)
-    reserve_smoke.push_back(new Smoke(0,0,0,0,"Img/fire.png",ren,0,0,3));
+    reserve_smoke.push_back(new Smoke(ren));
 
-  list_bonus.push_back(new Bonus(10,10,100,100,"Img/Shield.png",ren,5,10));
+  for(int i=0;i<5;i++){
+    reserve_bonus.push_back(new Coin(ren));
+  }
+  for(int i=0;i<5;i++){
+    reserve_bonus.push_back(new Shield(ren));
+  }
+  /*for(int i=0;i<5;i++){
+    reserve_bonus.push_back(new Multiplier(ren));
+  }*/
 
   font = TTF_OpenFont("font/Sans3.ttf", 24);
   end_game=false;
@@ -38,12 +51,12 @@ Game::Game() {
 
 void Game::init(){
 
-  std::cout << "init" << '\n';
+  //std::cout << "init" << '\n';
 /*Je vide mon vect smoke en mettant les balles dans la reserve*/
   size_t size=vect_smoke.size();
   for(size_t i=0;i<size;i++){
     reserve_smoke.push_back(vect_smoke[i]);
-    std::cout << "for" << '\n';
+    //std::cout << "for" << '\n';
   }
   vect_smoke.clear();
   /*je remets l avatar au milieu du jeu*/
@@ -108,14 +121,24 @@ void Game::update(){
 
   for(size_t i=0;i<vect_smoke.size();i++){
     vect_smoke[i]->update(S_W,S_H-G_H);
-  if(avatar->collision(vect_smoke[i])){
-    avatar->setlive(avatar->getlive()-1);
-    if(avatar->getlive()==0)
-      end_game=true;
-    else
-      init();
-  }
-  else if(water->collision(vect_smoke[i])){
+    if(avatar->collision(vect_smoke[i])){
+      avatar->setlive(avatar->getlive()-1);
+      if(avatar->getlive()==0)
+        end_game=true;
+      else
+        init();
+    }
+    else if(water->collision(vect_smoke[i])){
+      /*int temp = tirage_aleatoire(vect_bonus.size());
+      if(temp<int(vect_bonus.size())){
+        cout<<"vect_bonus"<<endl;
+        reserve_bonus[temp]->setx(vect_smoke[i]->getx());
+        reserve_bonus[temp]->sety(vect_smoke[i]->gety());
+
+        vect_bonus.push_back(reserve_bonus[temp]);
+
+        reserve_bonus.erase(reserve_bonus.begin()+temp);
+      }*/
       if((vect_smoke[i]->getsize())-1!=0){
 
         reserve_smoke.front()->setx(vect_smoke[i]->getx());
@@ -151,7 +174,10 @@ void Game::update(){
   }
   avatar->update(S_H,S_W);
   water->update(S_H,S_W);
-  list_bonus.front()->update(S_H,S_W);
+  if(!vect_bonus.empty()){
+    for(size_t i=0;i<vect_bonus.size();i++)
+      vect_bonus[i]->update(S_H,S_W);
+  }
 }
 
 void Game::input() {
@@ -201,7 +227,10 @@ void Game::render() {
   Heart->setx(10);
 
   draw(avatar);
-  draw(list_bonus.front());
+  if(!vect_bonus.empty()){
+    for(size_t i=0;i<vect_bonus.size();i++)
+      draw(vect_bonus[i]);
+  }
 
   char tampon [16] ;
   sprintf(tampon, "Score: %d", score);
