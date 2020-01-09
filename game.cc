@@ -2,10 +2,10 @@
 #include "game.hh"
 using namespace std;
 
-//int temp=3;
+int luck_bonus=60;
 
 int tirage_aleatoire(size_t size_vect){
-  return rand()%size_vect;
+  return int(rand()%(size_vect+luck_bonus));
 }
 
 Game::Game() {
@@ -15,7 +15,8 @@ Game::Game() {
   TTF_Init();
   running=true;
   round=1;
-
+  multiplier=1;
+  time=0;
   wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/wallpaper4.jpg",ren);
   Ground = new Object(0,S_H-67,67,S_W,"Img/sol.jpg",ren);
   Heart = new Object(10,10,30,30,"Img/Heart2.png",ren);
@@ -32,15 +33,15 @@ Game::Game() {
   for(int i=0;i<6;i++)
     reserve_smoke.push_back(new Smoke(ren));
 
-  for(int i=0;i<5;i++){
+  for(int i=0;i<10;i++){
     reserve_bonus.push_back(new Coin(ren));
   }
-  for(int i=0;i<5;i++){
-    reserve_bonus.push_back(new Shield(ren));
+  for(int i=0;i<10;i++){
+    reserve_bonus.push_back(new Life(ren));
   }
-  /*for(int i=0;i<5;i++){
+  for(int i=0;i<10;i++){
     reserve_bonus.push_back(new Multiplier(ren));
-  }*/
+  }
 
   font = TTF_OpenFont("font/Sans3.ttf", 24);
   end_game=false;
@@ -109,7 +110,7 @@ void Game::loop() {
       lastTime=lastFrame;
       frameCount=0;
     }
-
+    time+=1;
   //  cout << mousex << ", " << mousey << endl;
     input();
     render();
@@ -129,16 +130,15 @@ void Game::update(){
         init();
     }
     else if(water->collision(vect_smoke[i])){
-      /*int temp = tirage_aleatoire(vect_bonus.size());
-      if(temp<int(vect_bonus.size())){
-        cout<<"vect_bonus"<<endl;
+      int temp = tirage_aleatoire(reserve_bonus.size());
+      if(temp<int(reserve_bonus.size())){
         reserve_bonus[temp]->setx(vect_smoke[i]->getx());
         reserve_bonus[temp]->sety(vect_smoke[i]->gety());
 
         vect_bonus.push_back(reserve_bonus[temp]);
 
         reserve_bonus.erase(reserve_bonus.begin()+temp);
-      }*/
+      }
       if((vect_smoke[i]->getsize())-1!=0){
 
         reserve_smoke.front()->setx(vect_smoke[i]->getx());
@@ -167,7 +167,7 @@ void Game::update(){
         init();
         round++;
       }
-      score+=500*round;
+      score+=500*round*multiplier;
       water->setx(S_W*10);
       water->sety(-S_H*10);
     }
@@ -175,8 +175,21 @@ void Game::update(){
   avatar->update(S_H,S_W);
   water->update(S_H,S_W);
   if(!vect_bonus.empty()){
-    for(size_t i=0;i<vect_bonus.size();i++)
+    for(size_t i=0;i<vect_bonus.size();i++){
       vect_bonus[i]->update(S_H,S_W);
+      if(avatar->collision(vect_bonus[i])){
+        if(vect_bonus[i]->get_name()=="Multiplier"){
+          multiplier+=2;
+        }
+        else if(vect_bonus[i]->get_name()=="Coin"){
+          score=score+1000*multiplier;
+        }
+        else if(vect_bonus[i]->get_name()=="Life"){
+          avatar->setlive(avatar->getlive()+1);
+        }
+        vect_bonus.erase(vect_bonus.begin()+i);
+      }
+    }
   }
 }
 
@@ -203,6 +216,8 @@ void Game::input() {
         avatar->setlive(5);
         score=0;
         round=1;
+        multiplier=1;
+        time=0;
         end_game=false;
         init();
       }

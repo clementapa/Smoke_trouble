@@ -15,7 +15,7 @@ using namespace std;
 #include "water.hh"
 #include "bonus.hh"
 #include "coin.hh"
-#include "shield.hh"
+#include "life.hh"
 #include "multiplier.hh"
 
 
@@ -51,6 +51,8 @@ private:
   bool end_game;
   int score;
   int round;
+  int multiplier;
+  int time;
   vector<Smoke*> vect_smoke;
   list<Smoke*> reserve_smoke;
   vector<Bonus*> reserve_bonus;

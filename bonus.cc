@@ -1,11 +1,11 @@
 #include "bonus.hh"
 
-Bonus::Bonus(float x, float y, int h, int w, string filename, SDL_Renderer* ren,float vy, unsigned int e):Object_Dynamic(x,y,h,w,filename,ren,0,vy),time_effect(e){}
+Bonus::Bonus(string filename, SDL_Renderer* ren):Object_Dynamic(0,0,40,40,filename,ren,0,5){}
 
 void Bonus::update(int s_w,int s_h){
   y+=vy;
-  if (y+h>=s_w-45){
-    y=s_w-h-45;
+  if (y+h>=s_w-(this->w)*1.5){
+    y=s_w-h-(this->h)*1.5;
     vy=0;
   }
 }

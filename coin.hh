@@ -5,9 +5,13 @@
 using namespace std;
 
 class Coin: public Bonus{
+  const string name ="Coin";
   public:
-    Coin(SDL_Renderer* ren):Bonus(0,0,80,80,"Img/Coin.png",ren,5,10){}
+    Coin(SDL_Renderer* ren):Bonus("Img/Coin.png",ren){}
     ~Coin(){}
+    string get_name(){
+      return name;
+    }
 };
 
 #endif
