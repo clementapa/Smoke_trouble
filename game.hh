@@ -20,7 +20,7 @@ using namespace std;
 
 
 #define S_W 1366
-#define S_H 600//768
+#define S_H 768
 #define G_H 63
 class Game {
 public:
