@@ -164,8 +164,8 @@ void Game::update(){
 
       }
       if (vect_smoke.empty()) {
-        init();
         round++;
+        init();
       }
       score+=500*round*multiplier;
       water->setx(S_W*10);
