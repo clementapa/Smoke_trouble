@@ -45,11 +45,11 @@ Game::Game() {
   water = new Water(S_W*10,-S_H*10,600,10,"Img/water_line.png",ren,0,0);
   SMoke = new Water(S_W*10,-S_H*10,150,150,"Img/Smoke.png",ren,0,-5);
 
-  vect_fire.push_back(new Smoke(S_W-100,100,100,100,"Img/fire.png",ren,-20,-20,3));
-  vect_fire.push_back(new Smoke(0,100,100,100,"Img/fire.png",ren,20,-20,3));
+  vect_fire.push_back(new Fire(S_W-100,100,100,100,"Img/fire.png",ren,-20,-20,3));
+  vect_fire.push_back(new Fire(0,100,100,100,"Img/fire.png",ren,20,-20,3));
 
   for(int i=0;i<6;i++)
-    reserve_fire=reserve_fire+new Smoke(ren);
+    reserve_fire=reserve_fire+new Fire(ren);
   //cout<<reserve_fire.size()<<endl;
 
   for(int i=0;i<30;i++){
@@ -153,9 +153,9 @@ void Game::loop() {
 
 void Game::update(){
 
-  for(size_t i=0;i<vect_fire.size();i++){
+  for(size_t i=0;i<vect_fire.size();i++){//update fire + collision
     vect_fire[i]->update(S_W,S_H-G_H);
-    if(avatar->collision(vect_fire[i])){
+    if(avatar->collision(vect_fire[i])){//collision avec avatar?
       avatar->setlive(avatar->getlive()-1);
       if(avatar->getlive()==0){
         end_game=true;
@@ -163,9 +163,9 @@ void Game::update(){
       else //revenir au debut du round si l'avatar a encore au moins une vie
         init();
     }
-    else if(water->collision(vect_fire[i])){
-      int temp = tirage_aleatoire(reserve_bonus.size()*3);//1/3 d'avoir un bonus
-      if(temp<int(reserve_bonus.size()) && reserve_bonus.size()!=0){
+    else if(water->collision(vect_fire[i])){//collision avec eau?
+      int temp = tirage_aleatoire(reserve_bonus.size()*3);//1 chance sur 3 d'avoir un bonus
+      if(temp<int(reserve_bonus.size()) && reserve_bonus.size()!=0){//Faire apparaître un bonus ou pas
         reserve_bonus[temp]->setx(vect_fire[i]->getx());
         reserve_bonus[temp]->sety(vect_fire[i]->gety());
 
@@ -173,8 +173,8 @@ void Game::update(){
 
         reserve_bonus.erase(reserve_bonus.begin()+temp);
       }
-      if((vect_fire[i]->getsize())-1!=0){
-
+      if((vect_fire[i]->getsize())-1!=0){//Si la taille de la flamme n'est pas de 1 (dernière taille que peut avoir une flamme avant qu'elle ne disparaise)
+        //Prendre une flamme de la reserve, la modifier puis l'ajouter à vect_fire
         reserve_fire.front()->setx(vect_fire[i]->getx());
         reserve_fire.front()->sety(vect_fire[i]->gety()-50);
         reserve_fire.front()->seth(vect_fire[i]->geth()/2);
@@ -182,24 +182,24 @@ void Game::update(){
         reserve_fire.front()->setvx(-vect_fire[i]->getvx());
         reserve_fire.front()->setvy(-10);
         reserve_fire.front()->setsize(vect_fire[i]->getsize()-1);
-        vect_fire.push_back(reserve_fire.front());
+        vect_fire.push_back(reserve_fire.front());//la mettre dans vect_fire
 
-        reserve_fire.erase(reserve_fire.begin());
-
+        reserve_fire.erase(reserve_fire.begin());//suprimer de la reserve
+        //modifier la flamme qui a été touché
         vect_fire[i]->seth((vect_fire[i]->geth())/2);
         vect_fire[i]->setw((vect_fire[i]->getw())/2);
         vect_fire[i]->sety(vect_fire[i]->gety()-50);
         vect_fire[i]->setvy(-10);
         vect_fire[i]->setsize((vect_fire[i]->getsize())-1);
       }
-      else{
+      else{//Si la taille de la flamme est de 1,elle disparait et apparition d'une fumé
         SMoke->setx(vect_fire[i]->getx()+vect_fire[i]->getw()/2-SMoke->getw()/2);
         SMoke->sety(vect_fire[i]->gety()+vect_fire[i]->geth()/2-SMoke->geth()/2);
-        reserve_fire.push_back(vect_fire[i]);
-        vect_fire.erase(vect_fire.begin()+i);
+        reserve_fire.push_back(vect_fire[i]);//mettre la flamme dans la reserve pour la reutiliser après
+        vect_fire.erase(vect_fire.begin()+i);//l'enlever de vect_fire pour qu'elle ne s'affiche plus
 
       }
-      if (vect_fire.empty()) {
+      if (vect_fire.empty()) {//Si il n'y a plus de flamme dans le round bloquer le jeu, il faut appuyer sur R pour lancer le prochain round
         stop=1;
         while(stop==1){
           render();
@@ -208,14 +208,17 @@ void Game::update(){
         round++;
         init();
       }
-      score+=500*round*multiplier;
+      score+=500*round*multiplier;//augmenter le score total en fonction du round et du multiplicateur de score
+      /*remettre l'eau hors de l'écran si il a touché une flamme*/
       water->setx(S_W*10);
-      water->sety(-S_H*10);
+      water->sety(-S_H*10);//un y<0 pour respecter la contrainte(voir commentaire input space)
     }
   }
+  /*update position avatar,water et smoke*/
   avatar->update(S_H,S_W);
   water->update(S_H,S_W);
   SMoke->update(S_H,S_W);
+  /*update position des bonus et voir si collision avec avatar*/
   if(!vect_bonus.empty()){
     for(size_t i=0;i<vect_bonus.size();i++){
       vect_bonus[i]->update(S_H,S_W);
@@ -238,29 +241,29 @@ void Game::update(){
 void Game::input() {
   SDL_Event e;
   while(SDL_PollEvent(&e)) {
-    if(e.type == SDL_QUIT) {running=false; cout << "Quitting" << endl;}
-    if(e.type == SDL_KEYDOWN) {
-      if(e.key.keysym.sym == SDLK_ESCAPE) running=false;
-      if(e.key.keysym.sym == SDLK_c){
+    if(e.type == SDL_QUIT) {running=false; cout << "Quitting" << endl;}//Pour quitter le jeu avec la croix en haut à droite
+    if(e.type == SDL_KEYDOWN) {//Appuyer sur une touche du clavier
+      if(e.key.keysym.sym == SDLK_ESCAPE) running=false;//Echap pour quitter le jeu
+      if(e.key.keysym.sym == SDLK_c){//Changement de walpaper à chaque round
         stop=0;
         if(round%3==0) wallpaper->setImage("Img/wallpaper4.jpg",ren);
         else if(round%3==1) wallpaper->setImage("Img/wallpaper3.jpg",ren);
         else wallpaper->setImage("Img/wallpaper2.jpg",ren);
       }
-      if(e.key.keysym.sym == SDLK_SPACE && end_game==false){
-        if(water->gety()<0){
+      if(e.key.keysym.sym == SDLK_SPACE && end_game==false){//Faire apparaître le jet d'eau en modifiant les coordonnées
+        if(water->gety()<0){//Pour pas que le joueur puisse "spammer" la touche espace,il peut reappuyer sur la touche que si le jet d'eau sort de la fenêtre
           water->setx(avatar->getx() + avatar->getw()/2 - water->getw()/2);
           water->sety(avatar->gety()-G_H);
           water->setvy(-10.0);
         }
       }
-      if(e.key.keysym.sym == SDLK_q && end_game==false) {
+      if(e.key.keysym.sym == SDLK_q && end_game==false) {//Bouger l'avatar à gauche jusqu'à que la touche soit relaché
         avatar->setx(avatar->getx()-avatar->getvx());
       }
-      else if(e.key.keysym.sym == SDLK_d && end_game==false) {
+      else if(e.key.keysym.sym == SDLK_d && end_game==false) {//Bouger l'avatar à droite jusqu'à que la touche soit relaché
         avatar->setx(avatar->getx()+avatar->getvy());
       }
-      else if(e.key.keysym.sym == SDLK_r && end_game==true) {
+      else if(e.key.keysym.sym == SDLK_r && end_game==true) {//Si plus de vie , appuyer sur R pour relancer le jeu
         avatar->setlive(5);
         score=0;
         round=1;
@@ -272,11 +275,11 @@ void Game::input() {
       }
 
     }
-    if(e.type == SDL_KEYUP) {
-      if(e.key.keysym.sym == SDLK_q && end_game==false) {
+    if(e.type == SDL_KEYUP) {//Relacher la touche du clavier
+      if(e.key.keysym.sym == SDLK_q && end_game==false) {//Bouger l'avatar à gauche jusqu'à que la touche soit relaché
         avatar->setx(avatar->getx()-avatar->getvx());
       }
-      else if(e.key.keysym.sym == SDLK_d && end_game==false) {
+      else if(e.key.keysym.sym == SDLK_d && end_game==false) {//Bouger l'avatar à droite jusqu'à que la touche soit relaché
         avatar->setx(avatar->getx()+avatar->getvy());
       }
     }

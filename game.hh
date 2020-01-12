@@ -11,7 +11,7 @@
 #include <ctime>
 using namespace std;
 #include "avatar.hh"
-#include "smoke.hh"
+#include "fire.hh"
 #include "water.hh"
 #include "bonus.hh"
 #include "coin.hh"
@@ -57,8 +57,8 @@ private:
   int round;
   int multiplier;
   int time;
-  vector<Smoke*> vect_fire;
-  list<Smoke*> reserve_fire;
+  vector<Fire*> vect_fire;
+  list<Fire*> reserve_fire;
   vector<Bonus*> reserve_bonus;
   vector<Bonus*> vect_bonus;
 };
