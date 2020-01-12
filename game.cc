@@ -35,7 +35,7 @@ Game::Game() {
   //Loading = new Object(0.0,0.0,S_H,S_W,"Img/Loading.png",ren);
   //draw(Loading);
   Ground = new Object(0,S_H-67,67,S_W,"Img/sol.jpg",ren);
-  
+
   Heart = new Object(10,10,30,30,"Img/Heart2.png",ren);
   //Congrats=new Object(S_W/2-250,S_H/2-300,400,500,"Img/Congrats.png",ren);
   GameOver = new Object(S_W/2-250,S_H/2-300,400,500,"Img/GameOver2.png",ren);
@@ -43,14 +43,14 @@ Game::Game() {
   avatar = new Avatar(S_W/2-40,S_H-G_H-123,123,66,"Img/pompier.png",ren,15,10,5);
 
   water = new Water(S_W*10,-S_H*10,600,10,"Img/water_line.png",ren,0,0);
-  SMoke = new Water(S_W*10,-S_H*10,150,150,"Img/Smoke.png",ren,0,-10);
+  SMoke = new Water(S_W*10,-S_H*10,150,150,"Img/Smoke.png",ren,0,-5);
 
   vect_smoke.push_back(new Smoke(S_W-100,100,100,100,"Img/fire.png",ren,-20,-20,3));
   vect_smoke.push_back(new Smoke(0,100,100,100,"Img/fire.png",ren,20,-20,3));
 
   for(int i=0;i<6;i++)
     reserve_smoke=reserve_smoke+new Smoke(ren);
-  cout<<reserve_smoke.size()<<endl;
+  //cout<<reserve_smoke.size()<<endl;
 
   for(int i=0;i<30;i++){
     //reserve_bonus.push_back(new Coin(ren));
@@ -64,7 +64,7 @@ Game::Game() {
     //reserve_bonus.push_back(new Multiplier(ren));
     reserve_bonus=reserve_bonus+new Multiplier(ren);
   }
-  cout<<reserve_bonus.size()<<endl;
+  //cout<<reserve_bonus.size()<<endl;
 
   font = TTF_OpenFont("font/Sans3.ttf", 24);
   end_game=false;
@@ -91,7 +91,7 @@ void Game::init(){
   reserve_smoke.front()->sety(100);
   reserve_smoke.front()->seth(100);
   reserve_smoke.front()->setw(100);
-  reserve_smoke.front()->setvx(-20 -round*10);
+  reserve_smoke.front()->setvx(-20 -round*3);
   reserve_smoke.front()->setvy(-20);
   reserve_smoke.front()->setsize(3);
 
@@ -102,7 +102,7 @@ void Game::init(){
   reserve_smoke.front()->sety(100);
   reserve_smoke.front()->seth(100);
   reserve_smoke.front()->setw(100);
-  reserve_smoke.front()->setvx(20+round*10);
+  reserve_smoke.front()->setvx(20+round*3);
   reserve_smoke.front()->setvy(-20);
   reserve_smoke.front()->setsize(3);
 
@@ -124,6 +124,15 @@ Game::~Game() {
   delete avatar;
   delete water;
   delete SMoke;
+  for(size_t i;i<vect_smoke.size();i++)
+    delete vect_smoke[i];
+  for(size_t i;i<reserve_smoke.size();i++)
+    delete reserve_smoke.front();
+  for(size_t i;i<vect_bonus.size();i++)
+    delete vect_bonus[i];
+  for(size_t i;i<reserve_bonus.size();i++)
+    delete reserve_bonus[i];
+
   SDL_DestroyRenderer(ren);
   SDL_DestroyWindow(win);
   SDL_Quit();
@@ -138,8 +147,8 @@ void Game::loop() {
       lastTime=lastFrame;
       frameCount=0;
     }
-    time+=1;
-  //  cout << mousex << ", " << mousey << endl;
+    if(!end_game) time+=1;
+
     input();
     render();
     update();
@@ -152,14 +161,15 @@ void Game::update(){
     vect_smoke[i]->update(S_W,S_H-G_H);
     if(avatar->collision(vect_smoke[i])){
       avatar->setlive(avatar->getlive()-1);
-      if(avatar->getlive()==0)
+      if(avatar->getlive()==0){
         end_game=true;
-      else
+      }
+      else //revenir au debut du round si l'avatar a encore au moins une vie
         init();
     }
     else if(water->collision(vect_smoke[i])){
       int temp = tirage_aleatoire(reserve_bonus.size()*3);//1/3 d'avoir un bonus
-      if(temp<int(reserve_bonus.size())){
+      if(temp<int(reserve_bonus.size()) && reserve_bonus.size()!=0){
         reserve_bonus[temp]->setx(vect_smoke[i]->getx());
         reserve_bonus[temp]->sety(vect_smoke[i]->gety());
 
@@ -235,7 +245,12 @@ void Game::input() {
     if(e.type == SDL_QUIT) {running=false; cout << "Quitting" << endl;}
     if(e.type == SDL_KEYDOWN) {
       if(e.key.keysym.sym == SDLK_ESCAPE) running=false;
-      if(e.key.keysym.sym == SDLK_c) stop=0;
+      if(e.key.keysym.sym == SDLK_c){
+        stop=0;
+        if(round%3==0) wallpaper->setImage("Img/wallpaper4.jpg",ren);
+        else if(round%3==1) wallpaper->setImage("Img/wallpaper3.jpg",ren);
+        else wallpaper->setImage("Img/wallpaper2.jpg",ren);
+      }
       if(e.key.keysym.sym == SDLK_SPACE && end_game==false){
         if(water->gety()<0){
           water->setx(avatar->getx() + avatar->getw()/2 - water->getw()/2);
@@ -256,6 +271,7 @@ void Game::input() {
         multiplier=1;
         time=0;
         end_game=false;
+        wallpaper->setImage("Img/wallpaper4.jpg",ren);
         init();
       }
 
@@ -296,6 +312,12 @@ void Game::render() {
 
   sprintf(tampon, "Round: %d", round);
   draw(tampon, S_W-175, 50, 0, 100, 0);
+
+  sprintf(tampon, "Multiplier: %d", multiplier);
+  draw(tampon, S_W-175, 100, 0, 100, 0);
+
+  sprintf(tampon, "Time: %d", time);
+  draw(tampon, 10, 50, 0, 100, 0);
 
   for(size_t i=0;i<vect_smoke.size();i++){
     draw(vect_smoke[i]);

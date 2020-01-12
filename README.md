@@ -14,12 +14,8 @@ Le score, le round et le nombre de vie du joueur doivent être affichés ainsi q
 
 Bonus:
 -piece: augmente le score du joueur.
--x2: multiplie le score que prend le joueur à chaque fois qu'il touche une fumée par deux pendant un temps limité.
--bouclier: le joueur est invincible(ou détruit les fumées qu'il le touche) pendant un temps limité.
-
-Arrivé à un certain niveau:
--remettre la lance du debut (plus facile) pendant un temps limité.
-
+-x2: multiplie le score que prend le joueur à chaque fois qu'il touche une fumée.
+-life: le joueur gagne une vie en plus.
 
 Avatar collision avec:  
 - une smoke -> perte de vie.
@@ -31,10 +27,8 @@ Smoke collision avec:
 - water -> smoke se divise en 2.
 
 Bonus collision avec:
-- le sol genre on fait pop en l'air et ça va se mettre sur le sol.
+- le sol genre on fait apparaître en l'air et le bonus va se mettre sur le sol.
 - l'avatar -> faire l'effet du bonus.
 
 Water collision avec:
 - une smoke -> smoke se divise en 2.
-
-Bonus draw différentes couleur.

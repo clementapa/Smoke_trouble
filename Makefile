@@ -1,7 +1,7 @@
 EXEC=smoke
 SOURCES=$(wildcard *.cc)
 OBJECTS=$(SOURCES:.cc=.o)
-CCFLAGS=-Wall -Werror `sdl-config --cflags`
+CCFLAGS=-Wall `sdl-config --cflags`
 CC=g++
 $(EXEC): $(OBJECTS)
 	$(CC) $(OBJECTS) -lSDL2 -lSDL2_ttf -lSDL2_image `sdl-config --libs` -o $(EXEC)
