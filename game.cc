@@ -1,11 +1,21 @@
 #include <string>
 #include "game.hh"
+#include "utility.hh"
+
 using namespace std;
 
-int luck_bonus=60;
+template <class T,class U>
+vector<T*> operator+(vector<T*> lhs, U* rhs)
+{
+  lhs.push_back(rhs);
+  return lhs;
+}
 
-int tirage_aleatoire(size_t size_vect){
-  return int(rand()%(size_vect+luck_bonus));
+template <class T,class U>
+list<T*> operator+(list<T*> lhs, U* rhs)
+{
+  lhs.push_back(rhs);
+  return lhs;
 }
 
 Game::Game() {
@@ -31,17 +41,22 @@ Game::Game() {
   vect_smoke.push_back(new Smoke(0,100,100,100,"Img/fire.png",ren,20,-20,3));
 
   for(int i=0;i<6;i++)
-    reserve_smoke.push_back(new Smoke(ren));
+    reserve_smoke=reserve_smoke+new Smoke(ren);
+  cout<<reserve_smoke.size()<<endl;
 
-  for(int i=0;i<10;i++){
-    reserve_bonus.push_back(new Coin(ren));
+  for(int i=0;i<30;i++){
+    //reserve_bonus.push_back(new Coin(ren));
+    reserve_bonus=reserve_bonus+new Coin(ren);
+  }
+  for(int i=0;i<20;i++){
+    //reserve_bonus.push_back(new Life(ren));
+    reserve_bonus=reserve_bonus+new Life(ren);
   }
   for(int i=0;i<10;i++){
-    reserve_bonus.push_back(new Life(ren));
+    //reserve_bonus.push_back(new Multiplier(ren));
+    reserve_bonus=reserve_bonus+new Multiplier(ren);
   }
-  for(int i=0;i<10;i++){
-    reserve_bonus.push_back(new Multiplier(ren));
-  }
+  cout<<reserve_bonus.size()<<endl;
 
   font = TTF_OpenFont("font/Sans3.ttf", 24);
   end_game=false;
@@ -52,7 +67,6 @@ Game::Game() {
 
 void Game::init(){
 
-  //std::cout << "init" << '\n';
 /*Je vide mon vect smoke en mettant les balles dans la reserve*/
   size_t size=vect_smoke.size();
   for(size_t i=0;i<size;i++){
@@ -69,7 +83,7 @@ void Game::init(){
   reserve_smoke.front()->sety(100);
   reserve_smoke.front()->seth(100);
   reserve_smoke.front()->setw(100);
-  reserve_smoke.front()->setvx(-20 -round*14);
+  reserve_smoke.front()->setvx(-20 -round*10);
   reserve_smoke.front()->setvy(-20);
   reserve_smoke.front()->setsize(3);
 
@@ -130,7 +144,7 @@ void Game::update(){
         init();
     }
     else if(water->collision(vect_smoke[i])){
-      int temp = tirage_aleatoire(reserve_bonus.size());
+      int temp = tirage_aleatoire(reserve_bonus.size()*3);//1/3 d'avoir un bonus
       if(temp<int(reserve_bonus.size())){
         reserve_bonus[temp]->setx(vect_smoke[i]->getx());
         reserve_bonus[temp]->sety(vect_smoke[i]->gety());
