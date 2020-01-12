@@ -9,16 +9,23 @@ int tirage_aleatoire(size_t size_vect){
 }
 
 Game::Game() {
+
   SDL_Init(0);
   SDL_CreateWindowAndRenderer(S_W, S_H, 0, &win, &ren);//w=480(largeur) h=720 longueur
   SDL_SetWindowTitle(win, "Fire trouble!!!");
   TTF_Init();
   running=true;
+  stop=0;
   round=1;
   multiplier=1;
   time=0;
+
+
   wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/wallpaper4.jpg",ren);
+  //Loading = new Object(0.0,0.0,S_H,S_W,"Img/Loading.png",ren);
+  //draw(Loading);
   Ground = new Object(0,S_H-67,67,S_W,"Img/sol.jpg",ren);
+  
   Heart = new Object(10,10,30,30,"Img/Heart2.png",ren);
   //Congrats=new Object(S_W/2-250,S_H/2-300,400,500,"Img/Congrats.png",ren);
   GameOver = new Object(S_W/2-250,S_H/2-300,400,500,"Img/GameOver2.png",ren);
@@ -26,6 +33,7 @@ Game::Game() {
   avatar = new Avatar(S_W/2-40,S_H-G_H-123,123,66,"Img/pompier.png",ren,15,10,5);
 
   water = new Water(S_W*10,-S_H*10,600,10,"Img/water_line.png",ren,0,0);
+  SMoke = new Water(S_W*10,-S_H*10,150,150,"Img/Smoke.png",ren,0,-10);
 
   vect_smoke.push_back(new Smoke(S_W-100,100,100,100,"Img/fire.png",ren,-20,-20,3));
   vect_smoke.push_back(new Smoke(0,100,100,100,"Img/fire.png",ren,20,-20,3));
@@ -95,7 +103,13 @@ void Game::init(){
 
 Game::~Game() {
   TTF_Quit();
-
+  delete wallpaper;
+  delete Heart;
+  delete Ground;
+  delete GameOver;
+  delete avatar;
+  delete water;
+  delete SMoke;
   SDL_DestroyRenderer(ren);
   SDL_DestroyWindow(win);
   SDL_Quit();
@@ -159,11 +173,18 @@ void Game::update(){
         vect_smoke[i]->setsize((vect_smoke[i]->getsize())-1);
       }
       else{
+        SMoke->setx(vect_smoke[i]->getx()+vect_smoke[i]->getw()/2-SMoke->getw()/2);
+        SMoke->sety(vect_smoke[i]->gety()+vect_smoke[i]->geth()/2-SMoke->geth()/2);
         reserve_smoke.push_back(vect_smoke[i]);
         vect_smoke.erase(vect_smoke.begin()+i);
 
       }
       if (vect_smoke.empty()) {
+        stop=1;
+        while(stop==1){
+          render();
+          input();
+        }
         round++;
         init();
       }
@@ -174,6 +195,7 @@ void Game::update(){
   }
   avatar->update(S_H,S_W);
   water->update(S_H,S_W);
+  SMoke->update(S_H,S_W);
   if(!vect_bonus.empty()){
     for(size_t i=0;i<vect_bonus.size();i++){
       vect_bonus[i]->update(S_H,S_W);
@@ -199,6 +221,7 @@ void Game::input() {
     if(e.type == SDL_QUIT) {running=false; cout << "Quitting" << endl;}
     if(e.type == SDL_KEYDOWN) {
       if(e.key.keysym.sym == SDLK_ESCAPE) running=false;
+      if(e.key.keysym.sym == SDLK_c) stop=0;
       if(e.key.keysym.sym == SDLK_SPACE && end_game==false){
         if(water->gety()<0){
           water->setx(avatar->getx() + avatar->getw()/2 - water->getw()/2);
@@ -224,7 +247,12 @@ void Game::input() {
 
     }
     if(e.type == SDL_KEYUP) {
-      if(e.key.keysym.sym == SDLK_q) {}
+      if(e.key.keysym.sym == SDLK_q && end_game==false) {
+        avatar->setx(avatar->getx()-avatar->getvx());
+      }
+      else if(e.key.keysym.sym == SDLK_d && end_game==false) {
+        avatar->setx(avatar->getx()+avatar->getvy());
+      }
     }
      SDL_GetMouseState(&mousex, &mousey);
   }
@@ -233,8 +261,9 @@ void Game::input() {
 void Game::render() {
 
   draw(wallpaper);
-  draw(water);
+  if (stop==0) draw(water);
   draw(Ground);
+  draw(SMoke);
   for (int i = 0; i < avatar->getlive(); i++) {
     draw(Heart);
     Heart->setx(Heart->getx()+30);
@@ -274,6 +303,15 @@ void Game::render() {
     draw(tampon3, S_W/2-130, S_H/2+135, 0, 100, 0);
   }
 
+  if(stop==1){
+    char tampon2 [30] ;
+    sprintf(tampon2, "Your Score is %d", score);
+    draw(tampon2, S_W/2-100, S_H/2+100, 0, 100, 0);
+
+    char tampon3 [30] ;
+    sprintf(tampon3, "Press C to coninue !!");
+    draw(tampon3, S_W/2-100, S_H/2+125, 0, 100, 0);
+  }
   frameCount++;
   int timerFPS = SDL_GetTicks()-lastFrame;
   if(timerFPS<(1000/60)) {
