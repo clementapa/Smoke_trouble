@@ -2,14 +2,13 @@
 #define AVATAR_HPP_
 
 #include "object_dynamic.hh"
-using namespace std;
 
 class Avatar: public Object_Dynamic{
   private:
     unsigned int live;
 
   public:
-    Avatar(float x, float y, int h, int w, string filename, SDL_Renderer* ren, float vx, float vy, unsigned int l);
+    Avatar(float x, float y, int h, int w, std::string filename, SDL_Renderer* ren, float vx, float vy, unsigned int l);
     ~Avatar(){}
 
     void setlive(int new_l){live=new_l;}

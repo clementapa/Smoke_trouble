@@ -2,7 +2,6 @@
 #define OBJECT_DYNAMIC_HPP_
 
 #include "object.hh"
-using namespace std;
 
 class Object_Dynamic: public Object{
   protected:
@@ -10,7 +9,7 @@ class Object_Dynamic: public Object{
     float vy;
 
   public:
-    Object_Dynamic(float x, float y, int h, int w, string filename, SDL_Renderer* ren, float vx, float vy):Object(x,y,h,w,filename,ren),vx(vx),vy(vy){}
+    Object_Dynamic(float x, float y, int h, int w, std::string filename, SDL_Renderer* ren, float vx, float vy):Object(x,y,h,w,filename,ren),vx(vx),vy(vy){}
     virtual ~Object_Dynamic(){}
 
     float getvx() const {return vx;}

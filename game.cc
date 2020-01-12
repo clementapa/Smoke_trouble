@@ -33,7 +33,7 @@ Game::Game() {
 
   wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/wallpaper4.jpg",ren);
   //Loading = new Object(0.0,0.0,S_H,S_W,"Img/Loading.png",ren);
-  //draw(Loading);
+
   Ground = new Object(0,S_H-67,67,S_W,"Img/sol.jpg",ren);
 
   Heart = new Object(10,10,30,30,"Img/Heart2.png",ren);
@@ -43,28 +43,24 @@ Game::Game() {
   avatar = new Avatar(S_W/2-40,S_H-G_H-123,123,66,"Img/pompier.png",ren,15,10,5);
 
   water = new Water(S_W*10,-S_H*10,600,10,"Img/water_line.png",ren,0,0);
-  SMoke = new Water(S_W*10,-S_H*10,150,150,"Img/Smoke.png",ren,0,-5);
+  smoke = new Water(S_W*10,-S_H*10,150,150,"Img/smoke.png",ren,0,-5);// meme mouvement que water donc pas besoin de créer une autre classe
 
   vect_fire.push_back(new Fire(S_W-100,100,100,100,"Img/fire.png",ren,-20,-20,3));
   vect_fire.push_back(new Fire(0,100,100,100,"Img/fire.png",ren,20,-20,3));
 
+  /*Initialisation de la reserve de Fire*/
   for(int i=0;i<6;i++)
     reserve_fire=reserve_fire+new Fire(ren);
-  //cout<<reserve_fire.size()<<endl;
 
-  for(int i=0;i<30;i++){
-    //reserve_bonus.push_back(new Coin(ren));
+  /*Initialisation de la reserve de Bonus*/
+  for(int i=0;i<30;i++)//50% de chance (si il y a un bonus)
     reserve_bonus=reserve_bonus+new Coin(ren);
-  }
-  for(int i=0;i<20;i++){
-    //reserve_bonus.push_back(new Life(ren));
+
+  for(int i=0;i<20;i++)//35% de chance
     reserve_bonus=reserve_bonus+new Life(ren);
-  }
-  for(int i=0;i<10;i++){
-    //reserve_bonus.push_back(new Multiplier(ren));
+
+  for(int i=0;i<10;i++)//15% de chance a peu près
     reserve_bonus=reserve_bonus+new Multiplier(ren);
-  }
-  //cout<<reserve_bonus.size()<<endl;
 
   font = TTF_OpenFont("font/Sans3.ttf", 24);
   end_game=false;
@@ -79,7 +75,6 @@ void Game::init(){
   size_t size=vect_fire.size();
   for(size_t i=0;i<size;i++){
     reserve_fire.push_back(vect_fire[i]);
-    //std::cout << "for" << '\n';
   }
   vect_fire.clear();
   /*je remets l avatar au milieu du jeu*/
@@ -119,7 +114,7 @@ Game::~Game() {
   delete GameOver;
   delete avatar;
   delete water;
-  delete SMoke;
+  delete smoke;
   for(size_t i;i<vect_fire.size();i++)
     delete vect_fire[i];
   for(size_t i;i<reserve_fire.size();i++)
@@ -193,8 +188,8 @@ void Game::update(){
         vect_fire[i]->setsize((vect_fire[i]->getsize())-1);
       }
       else{//Si la taille de la flamme est de 1,elle disparait et apparition d'une fumé
-        SMoke->setx(vect_fire[i]->getx()+vect_fire[i]->getw()/2-SMoke->getw()/2);
-        SMoke->sety(vect_fire[i]->gety()+vect_fire[i]->geth()/2-SMoke->geth()/2);
+        smoke->setx(vect_fire[i]->getx()+vect_fire[i]->getw()/2-smoke->getw()/2);
+        smoke->sety(vect_fire[i]->gety()+vect_fire[i]->geth()/2-smoke->geth()/2);
         reserve_fire.push_back(vect_fire[i]);//mettre la flamme dans la reserve pour la reutiliser après
         vect_fire.erase(vect_fire.begin()+i);//l'enlever de vect_fire pour qu'elle ne s'affiche plus
 
@@ -217,7 +212,7 @@ void Game::update(){
   /*update position avatar,water et smoke*/
   avatar->update(S_H,S_W);
   water->update(S_H,S_W);
-  SMoke->update(S_H,S_W);
+  smoke->update(S_H,S_W);
   /*update position des bonus et voir si collision avec avatar*/
   if(!vect_bonus.empty()){
     for(size_t i=0;i<vect_bonus.size();i++){
@@ -232,7 +227,7 @@ void Game::update(){
         else if(vect_bonus[i]->get_name()=="Life"){
           avatar->setlive(avatar->getlive()+1);
         }
-        vect_bonus.erase(vect_bonus.begin()+i);
+        vect_bonus.erase(vect_bonus.begin()+i);// on enleve le bonus de vect_bonus
       }
     }
   }
@@ -292,10 +287,10 @@ void Game::render() {
   draw(wallpaper);
   if (stop==0) draw(water);
   draw(Ground);
-  draw(SMoke);
+  draw(smoke);
   for (int i = 0; i < avatar->getlive(); i++) {
     draw(Heart);
-    Heart->setx(Heart->getx()+30);
+    Heart->setx(Heart->getx()+30);//décale les coeurs pour les afficher à côté
   }
   Heart->setx(10);
 

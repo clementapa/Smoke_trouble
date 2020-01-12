@@ -1,4 +1,5 @@
 #include "bonus.hh"
+using namespace std;
 
 Bonus::Bonus(string filename, SDL_Renderer* ren):Object_Dynamic(0,0,40,40,filename,ren,0,5){}
 

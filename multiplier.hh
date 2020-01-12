@@ -2,14 +2,13 @@
 #define MULTIPLIER_HPP_
 
 #include "bonus.hh"
-using namespace std;
 
 class Multiplier: public Bonus{
-  const string name ="Multiplier";
+  const std::string name ="Multiplier";
   public:
     Multiplier(SDL_Renderer* ren):Bonus("Img/x2.png",ren){}
     ~Multiplier(){}
-    string get_name(){
+    std::string get_name(){
       return name;
     }
 };

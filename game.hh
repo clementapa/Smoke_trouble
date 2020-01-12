@@ -9,7 +9,6 @@
 #include <SDL2/SDL_ttf.h>
 #include <cstdlib>
 #include <ctime>
-using namespace std;
 #include "avatar.hh"
 #include "fire.hh"
 #include "water.hh"
@@ -49,7 +48,7 @@ private:
   int mousex, mousey;
   Avatar* avatar;
   Water* water;
-  Water* SMoke;
+  Water* smoke;// meme mouvement que water donc pas besoin de créer une autre classe
 
   bool end_game;
   bool stop;
@@ -57,10 +56,10 @@ private:
   int round;
   int multiplier;
   int time;
-  vector<Fire*> vect_fire;
-  list<Fire*> reserve_fire;
-  vector<Bonus*> reserve_bonus;
-  vector<Bonus*> vect_bonus;
+  std::vector<Fire*> vect_fire;
+  std::list<Fire*> reserve_fire;
+  std::vector<Bonus*> reserve_bonus;
+  std::vector<Bonus*> vect_bonus;
 };
 
 #endif //GAME_H
