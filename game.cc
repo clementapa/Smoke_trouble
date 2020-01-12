@@ -45,12 +45,12 @@ Game::Game() {
   water = new Water(S_W*10,-S_H*10,600,10,"Img/water_line.png",ren,0,0);
   SMoke = new Water(S_W*10,-S_H*10,150,150,"Img/Smoke.png",ren,0,-5);
 
-  vect_smoke.push_back(new Smoke(S_W-100,100,100,100,"Img/fire.png",ren,-20,-20,3));
-  vect_smoke.push_back(new Smoke(0,100,100,100,"Img/fire.png",ren,20,-20,3));
+  vect_fire.push_back(new Smoke(S_W-100,100,100,100,"Img/fire.png",ren,-20,-20,3));
+  vect_fire.push_back(new Smoke(0,100,100,100,"Img/fire.png",ren,20,-20,3));
 
   for(int i=0;i<6;i++)
-    reserve_smoke=reserve_smoke+new Smoke(ren);
-  //cout<<reserve_smoke.size()<<endl;
+    reserve_fire=reserve_fire+new Smoke(ren);
+  //cout<<reserve_fire.size()<<endl;
 
   for(int i=0;i<30;i++){
     //reserve_bonus.push_back(new Coin(ren));
@@ -75,43 +75,39 @@ Game::Game() {
 
 void Game::init(){
 
-/*Je vide mon vect smoke en mettant les balles dans la reserve*/
-  size_t size=vect_smoke.size();
+/*Je vide mon vect fire en mettant les fires dans la reserve*/
+  size_t size=vect_fire.size();
   for(size_t i=0;i<size;i++){
-    reserve_smoke.push_back(vect_smoke[i]);
+    reserve_fire.push_back(vect_fire[i]);
     //std::cout << "for" << '\n';
   }
-  vect_smoke.clear();
+  vect_fire.clear();
   /*je remets l avatar au milieu du jeu*/
   avatar->setx(S_W/2-40);
 
-/*je prend les deux premieres balles de la reserve et je les transforment en grandes balles*/
-/*puis je les push dans vect smoke*/
-  reserve_smoke.front()->setx(S_W-100);
-  reserve_smoke.front()->sety(100);
-  reserve_smoke.front()->seth(100);
-  reserve_smoke.front()->setw(100);
-  reserve_smoke.front()->setvx(-20 -round*3);
-  reserve_smoke.front()->setvy(-20);
-  reserve_smoke.front()->setsize(3);
+/*je prend les deux premieres flamme de la reserve et je les transforme en grandes flamme*/
+/*puis je les push dans vect fire*/
+  reserve_fire.front()->setx(S_W-100);
+  reserve_fire.front()->sety(100);
+  reserve_fire.front()->seth(100);
+  reserve_fire.front()->setw(100);
+  reserve_fire.front()->setvx(-20 -round*3);
+  reserve_fire.front()->setvy(-20);
+  reserve_fire.front()->setsize(3);
 
-  vect_smoke.push_back(reserve_smoke.front());
-  reserve_smoke.erase(reserve_smoke.begin());
+  vect_fire.push_back(reserve_fire.front());
+  reserve_fire.erase(reserve_fire.begin());
 
-  reserve_smoke.front()->setx(0);
-  reserve_smoke.front()->sety(100);
-  reserve_smoke.front()->seth(100);
-  reserve_smoke.front()->setw(100);
-  reserve_smoke.front()->setvx(20+round*3);
-  reserve_smoke.front()->setvy(-20);
-  reserve_smoke.front()->setsize(3);
+  reserve_fire.front()->setx(0);
+  reserve_fire.front()->sety(100);
+  reserve_fire.front()->seth(100);
+  reserve_fire.front()->setw(100);
+  reserve_fire.front()->setvx(20+round*3);
+  reserve_fire.front()->setvy(-20);
+  reserve_fire.front()->setsize(3);
 
-  vect_smoke.push_back(reserve_smoke.front());
-  reserve_smoke.erase(reserve_smoke.begin());
-
-  /*vect_smoke.push_back(new Smoke(S_W-100,130,100,100,"Img/fire.png",ren,-20,-20,3));
-  vect_smoke.push_back(new Smoke(0,130,100,100,"Img/fire.png",ren,20,-20,3));
-*/
+  vect_fire.push_back(reserve_fire.front());
+  reserve_fire.erase(reserve_fire.begin());
 }
 
 
@@ -124,10 +120,10 @@ Game::~Game() {
   delete avatar;
   delete water;
   delete SMoke;
-  for(size_t i;i<vect_smoke.size();i++)
-    delete vect_smoke[i];
-  for(size_t i;i<reserve_smoke.size();i++)
-    delete reserve_smoke.front();
+  for(size_t i;i<vect_fire.size();i++)
+    delete vect_fire[i];
+  for(size_t i;i<reserve_fire.size();i++)
+    delete reserve_fire.front();
   for(size_t i;i<vect_bonus.size();i++)
     delete vect_bonus[i];
   for(size_t i;i<reserve_bonus.size();i++)
@@ -157,9 +153,9 @@ void Game::loop() {
 
 void Game::update(){
 
-  for(size_t i=0;i<vect_smoke.size();i++){
-    vect_smoke[i]->update(S_W,S_H-G_H);
-    if(avatar->collision(vect_smoke[i])){
+  for(size_t i=0;i<vect_fire.size();i++){
+    vect_fire[i]->update(S_W,S_H-G_H);
+    if(avatar->collision(vect_fire[i])){
       avatar->setlive(avatar->getlive()-1);
       if(avatar->getlive()==0){
         end_game=true;
@@ -167,43 +163,43 @@ void Game::update(){
       else //revenir au debut du round si l'avatar a encore au moins une vie
         init();
     }
-    else if(water->collision(vect_smoke[i])){
+    else if(water->collision(vect_fire[i])){
       int temp = tirage_aleatoire(reserve_bonus.size()*3);//1/3 d'avoir un bonus
       if(temp<int(reserve_bonus.size()) && reserve_bonus.size()!=0){
-        reserve_bonus[temp]->setx(vect_smoke[i]->getx());
-        reserve_bonus[temp]->sety(vect_smoke[i]->gety());
+        reserve_bonus[temp]->setx(vect_fire[i]->getx());
+        reserve_bonus[temp]->sety(vect_fire[i]->gety());
 
         vect_bonus.push_back(reserve_bonus[temp]);
 
         reserve_bonus.erase(reserve_bonus.begin()+temp);
       }
-      if((vect_smoke[i]->getsize())-1!=0){
+      if((vect_fire[i]->getsize())-1!=0){
 
-        reserve_smoke.front()->setx(vect_smoke[i]->getx());
-        reserve_smoke.front()->sety(vect_smoke[i]->gety()-50);
-        reserve_smoke.front()->seth(vect_smoke[i]->geth()/2);
-        reserve_smoke.front()->setw(vect_smoke[i]->getw()/2);
-        reserve_smoke.front()->setvx(-vect_smoke[i]->getvx());
-        reserve_smoke.front()->setvy(-10);
-        reserve_smoke.front()->setsize(vect_smoke[i]->getsize()-1);
-        vect_smoke.push_back(reserve_smoke.front());
+        reserve_fire.front()->setx(vect_fire[i]->getx());
+        reserve_fire.front()->sety(vect_fire[i]->gety()-50);
+        reserve_fire.front()->seth(vect_fire[i]->geth()/2);
+        reserve_fire.front()->setw(vect_fire[i]->getw()/2);
+        reserve_fire.front()->setvx(-vect_fire[i]->getvx());
+        reserve_fire.front()->setvy(-10);
+        reserve_fire.front()->setsize(vect_fire[i]->getsize()-1);
+        vect_fire.push_back(reserve_fire.front());
 
-        reserve_smoke.erase(reserve_smoke.begin());
+        reserve_fire.erase(reserve_fire.begin());
 
-        vect_smoke[i]->seth((vect_smoke[i]->geth())/2);
-        vect_smoke[i]->setw((vect_smoke[i]->getw())/2);
-        vect_smoke[i]->sety(vect_smoke[i]->gety()-50);
-        vect_smoke[i]->setvy(-10);
-        vect_smoke[i]->setsize((vect_smoke[i]->getsize())-1);
+        vect_fire[i]->seth((vect_fire[i]->geth())/2);
+        vect_fire[i]->setw((vect_fire[i]->getw())/2);
+        vect_fire[i]->sety(vect_fire[i]->gety()-50);
+        vect_fire[i]->setvy(-10);
+        vect_fire[i]->setsize((vect_fire[i]->getsize())-1);
       }
       else{
-        SMoke->setx(vect_smoke[i]->getx()+vect_smoke[i]->getw()/2-SMoke->getw()/2);
-        SMoke->sety(vect_smoke[i]->gety()+vect_smoke[i]->geth()/2-SMoke->geth()/2);
-        reserve_smoke.push_back(vect_smoke[i]);
-        vect_smoke.erase(vect_smoke.begin()+i);
+        SMoke->setx(vect_fire[i]->getx()+vect_fire[i]->getw()/2-SMoke->getw()/2);
+        SMoke->sety(vect_fire[i]->gety()+vect_fire[i]->geth()/2-SMoke->geth()/2);
+        reserve_fire.push_back(vect_fire[i]);
+        vect_fire.erase(vect_fire.begin()+i);
 
       }
-      if (vect_smoke.empty()) {
+      if (vect_fire.empty()) {
         stop=1;
         while(stop==1){
           render();
@@ -319,8 +315,8 @@ void Game::render() {
   sprintf(tampon, "Time: %d", time);
   draw(tampon, 10, 50, 0, 100, 0);
 
-  for(size_t i=0;i<vect_smoke.size();i++){
-    draw(vect_smoke[i]);
+  for(size_t i=0;i<vect_fire.size();i++){
+    draw(vect_fire[i]);
   }
   //avatar->setlive(0);
   if(end_game==true){

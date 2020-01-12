@@ -57,8 +57,8 @@ private:
   int round;
   int multiplier;
   int time;
-  vector<Smoke*> vect_smoke;
-  list<Smoke*> reserve_smoke;
+  vector<Smoke*> vect_fire;
+  list<Smoke*> reserve_fire;
   vector<Bonus*> reserve_bonus;
   vector<Bonus*> vect_bonus;
 };
