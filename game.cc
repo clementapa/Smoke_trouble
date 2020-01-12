@@ -43,7 +43,7 @@ Game::Game() {
   avatar = new Avatar(S_W/2-40,S_H-G_H-123,123,66,"Img/pompier.png",ren,15,10,5);
 
   water = new Water(S_W*10,-S_H*10,600,10,"Img/water_line.png",ren,0,0);
-  smoke = new Water(S_W*10,-S_H*10,150,150,"Img/smoke.png",ren,0,-5);// meme mouvement que water donc pas besoin de créer une autre classe
+  Smoke = new Water(S_W*10,-S_H*10,150,150,"Img/Smoke.png",ren,0,-5);// meme mouvement que water donc pas besoin de créer une autre classe
 
   vect_fire.push_back(new Fire(S_W-100,100,100,100,"Img/fire.png",ren,-20,-20,3));
   vect_fire.push_back(new Fire(0,100,100,100,"Img/fire.png",ren,20,-20,3));
@@ -114,7 +114,7 @@ Game::~Game() {
   delete GameOver;
   delete avatar;
   delete water;
-  delete smoke;
+  delete Smoke;
   for(size_t i;i<vect_fire.size();i++)
     delete vect_fire[i];
   for(size_t i;i<reserve_fire.size();i++)
@@ -188,8 +188,8 @@ void Game::update(){
         vect_fire[i]->setsize((vect_fire[i]->getsize())-1);
       }
       else{//Si la taille de la flamme est de 1,elle disparait et apparition d'une fumé
-        smoke->setx(vect_fire[i]->getx()+vect_fire[i]->getw()/2-smoke->getw()/2);
-        smoke->sety(vect_fire[i]->gety()+vect_fire[i]->geth()/2-smoke->geth()/2);
+        Smoke->setx(vect_fire[i]->getx()+vect_fire[i]->getw()/2-Smoke->getw()/2);
+        Smoke->sety(vect_fire[i]->gety()+vect_fire[i]->geth()/2-Smoke->geth()/2);
         reserve_fire.push_back(vect_fire[i]);//mettre la flamme dans la reserve pour la reutiliser après
         vect_fire.erase(vect_fire.begin()+i);//l'enlever de vect_fire pour qu'elle ne s'affiche plus
 
@@ -212,7 +212,7 @@ void Game::update(){
   /*update position avatar,water et smoke*/
   avatar->update(S_H,S_W);
   water->update(S_H,S_W);
-  smoke->update(S_H,S_W);
+  Smoke->update(S_H,S_W);
   /*update position des bonus et voir si collision avec avatar*/
   if(!vect_bonus.empty()){
     for(size_t i=0;i<vect_bonus.size();i++){
@@ -287,7 +287,7 @@ void Game::render() {
   draw(wallpaper);
   if (stop==0) draw(water);
   draw(Ground);
-  draw(smoke);
+  draw(Smoke);
   for (int i = 0; i < avatar->getlive(); i++) {
     draw(Heart);
     Heart->setx(Heart->getx()+30);//décale les coeurs pour les afficher à côté

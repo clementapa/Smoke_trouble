@@ -48,7 +48,7 @@ private:
   int mousex, mousey;
   Avatar* avatar;
   Water* water;
-  Water* smoke;// meme mouvement que water donc pas besoin de créer une autre classe
+  Water* Smoke;// meme mouvement que water donc pas besoin de créer une autre classe
 
   bool end_game;
   bool stop;
