@@ -43,12 +43,16 @@ private:
   Object* Heart;
   Object* Ground;
   Object* GameOver;
+  //Object* Loading;
 
   //Object* Congrats;
   int mousex, mousey;
   Avatar* avatar;
   Water* water;
+  Water* SMoke;
+
   bool end_game;
+  bool stop;
   int score;
   int round;
   int multiplier;
