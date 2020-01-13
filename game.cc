@@ -32,12 +32,12 @@ Game::Game() {
 
 
   wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/wallpaper4.jpg",ren);
-  //Loading = new Object(0.0,0.0,S_H,S_W,"Img/Loading.png",ren);
-
+  //Loading = new Object(0.0,0.0,S_H,S_W,"Img/wallpaper4.png",ren);
+  //draw(Loading);
   Ground = new Object(0,S_H-67,67,S_W,"Img/sol.jpg",ren);
 
   Heart = new Object(10,10,30,30,"Img/Heart2.png",ren);
-  //Congrats=new Object(S_W/2-250,S_H/2-300,400,500,"Img/Congrats.png",ren);
+  Congrats=new Object(S_W/2-250,S_H/2-300,400,500,"Img/Congrats.png",ren);
   GameOver = new Object(S_W/2-250,S_H/2-300,400,500,"Img/GameOver2.png",ren);
 
   avatar = new Avatar(S_W/2-40,S_H-G_H-123,123,66,"Img/pompier.png",ren,15,10,5);
@@ -86,7 +86,7 @@ void Game::init(){
   reserve_fire.front()->sety(100);
   reserve_fire.front()->seth(100);
   reserve_fire.front()->setw(100);
-  reserve_fire.front()->setvx(-20 -round*3);
+  reserve_fire.front()->setvx(-20 -round*10);
   reserve_fire.front()->setvy(-20);
   reserve_fire.front()->setsize(3);
 
@@ -97,7 +97,7 @@ void Game::init(){
   reserve_fire.front()->sety(100);
   reserve_fire.front()->seth(100);
   reserve_fire.front()->setw(100);
-  reserve_fire.front()->setvx(20+round*3);
+  reserve_fire.front()->setvx(20+round*10);
   reserve_fire.front()->setvy(-20);
   reserve_fire.front()->setsize(3);
 
@@ -334,6 +334,7 @@ void Game::render() {
   }
 
   if(stop==1){
+    draw(Congrats);
     char tampon2 [30] ;
     sprintf(tampon2, "Your Score is %d", score);
     draw(tampon2, S_W/2-100, S_H/2+100, 0, 100, 0);
