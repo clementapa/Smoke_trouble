@@ -227,6 +227,7 @@ void Game::update(){
         else if(vect_bonus[i]->get_name()=="Life"){
           avatar->setlive(avatar->getlive()+1);
         }
+        reserve_bonus.push_back(vect_bonus[i]);
         vect_bonus.erase(vect_bonus.begin()+i);// on enleve le bonus de vect_bonus
       }
     }
