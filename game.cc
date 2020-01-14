@@ -42,7 +42,7 @@ Game::Game() {
 
   avatar = new Avatar(S_W/2-40,S_H-G_H-123,123,66,"Img/pompier.png",ren,15,10,5);
 
-  water = new Water(S_W*10,-S_H*10,600,10,"Img/water_line.png",ren,0,0);
+  water = new Water(S_W*10,-S_H*10,600,10,"Img/water.png",ren,0,0);
   Smoke = new Water(S_W*10,-S_H*10,150,150,"Img/Smoke.png",ren,0,-5);// meme mouvement que water donc pas besoin de créer une autre classe
 
   vect_fire.push_back(new Fire(S_W-100,100,100,100,"Img/fire.png",ren,-20,-20,3));
