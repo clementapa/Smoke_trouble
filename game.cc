@@ -42,7 +42,7 @@ Game::Game() {
 
   avatar = new Avatar(S_W/2-40,S_H-G_H-123,123,66,"Img/pompier.png",ren,15,10,5);
 
-  water = new Water(S_W*10,-S_H*10,600,10,"Img/water.png",ren,0,0);
+  water = new Water(S_W*10,-S_H*10,600,10,"Img/water_line.png",ren,0,0);
   Smoke = new Water(S_W*10,-S_H*10,150,150,"Img/Smoke.png",ren,0,-5);// meme mouvement que water donc pas besoin de créer une autre classe
 
   vect_fire.push_back(new Fire(S_W-100,100,100,100,"Img/fire.png",ren,-20,-20,3));
@@ -242,9 +242,18 @@ void Game::input() {
       if(e.key.keysym.sym == SDLK_ESCAPE) running=false;//Echap pour quitter le jeu
       if(e.key.keysym.sym == SDLK_c){//Changement de walpaper à chaque round
         stop=0;
-        if(round%3==0) wallpaper->setImage("Img/wallpaper4.jpg",ren);
-        else if(round%3==1) wallpaper->setImage("Img/wallpaper3.jpg",ren);
-        else wallpaper->setImage("Img/wallpaper2.jpg",ren);
+        if(round%3==0){
+          wallpaper->setImage("Img/wallpaper4.jpg",ren);
+          Ground->setImage("Img/sol.jpg",ren);
+        }
+        else if(round%3==1){
+          wallpaper->setImage("Img/wallpaper2.jpg",ren);
+          Ground->setImage("Img/sol2.png",ren);
+        }
+        else{
+          wallpaper->setImage("Img/wallpaper_mario.png",ren);
+          Ground->setImage("Img/sol_mario.png",ren);
+        }
       }
       if(e.key.keysym.sym == SDLK_SPACE && end_game==false){//Faire apparaître le jet d'eau en modifiant les coordonnées
         if(water->gety()<0){//Pour pas que le joueur puisse "spammer" la touche espace,il peut reappuyer sur la touche que si le jet d'eau sort de la fenêtre
