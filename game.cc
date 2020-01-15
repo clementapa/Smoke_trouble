@@ -51,13 +51,13 @@ Game::Game() {
     reserve_fire=reserve_fire+new Fire(ren);
 
   /*Initialisation de la reserve de Bonus*/
-  for(int i=0;i<30;i++)//50% de chance (si il y a un bonus)
+  for(int i=0;i<3;i++)//50% de chance (si il y a un bonus)
     reserve_bonus=reserve_bonus+new Coin(ren);
 
-  for(int i=0;i<20;i++)//35% de chance
+  for(int i=0;i<2;i++)//35% de chance
     reserve_bonus=reserve_bonus+new Life(ren);
 
-  for(int i=0;i<10;i++)//15% de chance a peu près
+  for(int i=0;i<1;i++)//15% de chance a peu près
     reserve_bonus=reserve_bonus+new Multiplier(ren);
 
   font = TTF_OpenFont("font/Sans3.ttf", 24);
@@ -225,6 +225,8 @@ void Game::update(){
         else if(vect_bonus[i]->get_name()=="Life"){
           avatar->setlive(avatar->getlive()+1);
         }
+        reserve_bonus.push_back(vect_bonus[i]);
+        vect_bonus[i]->setvy(5);
         vect_bonus.erase(vect_bonus.begin()+i);// on enleve le bonus de vect_bonus
       }
     }
