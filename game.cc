@@ -21,7 +21,7 @@ list<T*> operator+(list<T*> lhs, U* rhs)
 Game::Game() {
 
   SDL_Init(0);
-  SDL_CreateWindowAndRenderer(S_W, S_H, 0, &win, &ren);//w=480(largeur) h=720 longueur
+  SDL_CreateWindowAndRenderer(S_W, S_H, 0, &win, &ren);
   SDL_SetWindowTitle(win, "Fire trouble!!!");
   TTF_Init();
   running=true;
@@ -31,14 +31,12 @@ Game::Game() {
   time=0;
 
 
-  wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/wallpaper4.jpg",ren);
-  //Loading = new Object(0.0,0.0,S_H,S_W,"Img/wallpaper4.png",ren);
-  //draw(Loading);
+  wallpaper = new Object(0.0,0.0,S_H,S_W,"Img/wallpaper.jpg",ren);
   Ground = new Object(0,S_H-67,67,S_W,"Img/sol.jpg",ren);
 
   Heart = new Object(10,10,30,30,"Img/Heart2.png",ren);
   Congrats=new Object(S_W/2-250,S_H/2-300,400,500,"Img/Congrats.png",ren);
-  GameOver = new Object(S_W/2-250,S_H/2-300,400,500,"Img/GameOver2.png",ren);
+  GameOver = new Object(S_W/2-250,S_H/2-300,400,500,"Img/GameOver.png",ren);
 
   avatar = new Avatar(S_W/2-40,S_H-G_H-123,123,66,"Img/pompier.png",ren,15,10,5);
 
@@ -227,7 +225,6 @@ void Game::update(){
         else if(vect_bonus[i]->get_name()=="Life"){
           avatar->setlive(avatar->getlive()+1);
         }
-        reserve_bonus.push_back(vect_bonus[i]);
         vect_bonus.erase(vect_bonus.begin()+i);// on enleve le bonus de vect_bonus
       }
     }
@@ -243,7 +240,7 @@ void Game::input() {
       if(e.key.keysym.sym == SDLK_c){//Changement de walpaper à chaque round
         stop=0;
         if(round%3==0){
-          wallpaper->setImage("Img/wallpaper4.jpg",ren);
+          wallpaper->setImage("Img/wallpaper.jpg",ren);
           Ground->setImage("Img/sol.jpg",ren);
         }
         else if(round%3==1){
@@ -275,7 +272,8 @@ void Game::input() {
         multiplier=1;
         time=0;
         end_game=false;
-        wallpaper->setImage("Img/wallpaper4.jpg",ren);
+        wallpaper->setImage("Img/wallpaper.jpg",ren);
+        Ground->setImage("Img/sol.jpg",ren);
         init();
       }
 
