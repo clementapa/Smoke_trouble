@@ -239,7 +239,7 @@ void Game::input() {
     if(e.type == SDL_QUIT) {running=false; cout << "Quitting" << endl;}//Pour quitter le jeu avec la croix en haut à droite
     if(e.type == SDL_KEYDOWN) {//Appuyer sur une touche du clavier
       if(e.key.keysym.sym == SDLK_ESCAPE) running=false;//Echap pour quitter le jeu
-      if(e.key.keysym.sym == SDLK_c){//Changement de walpaper à chaque round
+      if(e.key.keysym.sym == SDLK_c && stop==1){//Changement de walpaper à chaque round
         stop=0;
         if(round%3==0){
           wallpaper->setImage("Img/wallpaper.jpg",ren);
